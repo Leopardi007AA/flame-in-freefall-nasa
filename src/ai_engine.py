@@ -1,42 +1,41 @@
-import os
-import glob
+import json
 from google import genai
 from google.genai import types
 
-def load_context_from_data():
-    """Legge tutti i file di testo e PDF dalla cartella data/."""
-    context = ""
-    # Lettura file .txt
-    for file_path in glob.glob("data/*.txt"):
-        with open(file_path, "r", encoding="utf-8") as f:
-            context += f"\n--- Fonte: {file_path} ---\n" + f.read()
-    return context
-
-def ask_nasa_ai(prompt: str, api_key: str) -> str:
-    """Interroga Gemini fornendo il contesto sui dati di combustione."""
-    if not api_key:
-        return "Inserisci la tua API Key di Gemini nella sidebar per attivare l'AI."
-
-    client = genai.Client(api_key=api_key)
-    context_data = load_context_from_data()
-
-    system_instruction = (
-        "Sei un assistente scientifico della NASA specializzato in combustione in microgravità. "
-        "Usa il seguente contesto tecnico estratto dai database e report NASA per rispondere "
-        "alle domande dell'utente sulla sicurezza antincendio in habitat spaziali (Luna/Marte). "
-        "Sii preciso, sintetico e professionale.\n\n"
-        f"CONTESTO DATI NASA:\n{context_data}"
+def genera_modifica_dashboard(prompt_utente: str, stato_attuale: dict) -> dict:
+    """
+    Invia il contesto attuale dell'applicazione e le richieste dell'utente a Gemini.
+    Restituisce un dizionario contenente le modifiche da applicare.
+    """
+    client = genai.Client()
+    
+    system_instruction = """
+    Sei un assistente specializzato nello sviluppo di dashboard per la NASA Space Apps Challenge.
+    Il tuo compito è analizzare la richiesta dell'utente e lo stato attuale dei dati/grafici
+    e restituire un JSON valido con le modifiche da applicare alla dashboard.
+    
+    Formato risposta JSON richiesto:
+    {
+        "spiegazione": "Descrizione sintetica delle modifiche apportate",
+        "tipo_grafico": "bar | line | scatter | pie",
+        "titolo_grafico": "Titolo del grafico",
+        "codice_aggiornato": "Codice Python/Streamlit generato"
+    }
+    """
+    
+    prompt = f"""
+    Stato attuale della dashboard: {json.dumps(stato_attuale)}
+    Richiesta dell'utente: {prompt_utente}
+    """
+    
+    response = client.models.generate_content(
+        model="gemini-3.8-flash",
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            system_instruction=system_instruction,
+            temperature=0.2,
+            response_mime_type="application/json"
+        ),
     )
-
-    try:
-        response = client.models.generate_content(
-    model="gemini-3.8-flash",
-    contents=prompt,
-    config=types.GenerateContentConfig(
-        system_instruction=system_instruction,
-        temperature=0.2,
-    ),
-)
-        return response.text
-    except Exception as e:
-        return f"Errore durante la chiamata AI: {str(e)}"
+    
+    return json.loads(response.text)
