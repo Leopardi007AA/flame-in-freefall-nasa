@@ -18,6 +18,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SYSTEM_PROMPT_PATH = ROOT / "src" / "system_prompt.txt"
 DEMO_ANSWERS_PATH = ROOT / "src" / "demo_answers.json"
 DEFAULT_MODEL = "gemini-3.8-flash"   # verifica con client.models.list() quali modelli hai
+FALLBACK_MODELS = ["gemini-3.7-flash", "gemini-3.5-flash"]   # usati se il principale e' sovraccarico
+RETRY_WAITS = [1.5, 3.0]                                      # secondi tra i tentativi su 503/429
 
 
 def get_api_key(sidebar_value: str = "") -> str:
@@ -37,6 +39,27 @@ def _records_json(df) -> str:
     return df[cols].to_json(orient="records", force_ascii=False)
 
 
+def _generate(client, types, model, prompt, system):
+    """Una chiamata a Gemini; su 503/429 riprova, poi prova i modelli di riserva."""
+    last = None
+    for m in [model] + [x for x in FALLBACK_MODELS if x != model]:
+        for wait in [0.0] + RETRY_WAITS:
+            if wait:
+                time.sleep(wait)
+            try:
+                return client.models.generate_content(
+                    model=m, contents=prompt,
+                    config=types.GenerateContentConfig(
+                        system_instruction=system, temperature=0.1,
+                        response_mime_type="application/json", response_schema=AiReply))
+            except Exception as e:
+                code = getattr(e, "code", None)
+                if code not in (429, 500, 503, 504):
+                    raise
+                last = e
+    raise last
+
+
 def ask(question: str, df, scenario: dict, api_key: str, model: str = DEFAULT_MODEL):
     """Interroga Gemini. Restituisce (AiReply validata | None, lista di problemi)."""
     from google import genai            # import tardivo: i test non richiedono la libreria
@@ -48,16 +71,7 @@ def ask(question: str, df, scenario: dict, api_key: str, model: str = DEFAULT_MO
               f"DOMANDA: {question}")
     problems: list[str] = []
     for _ in range(2):
-        resp = client.models.generate_content(
-            model=model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=system,
-                temperature=0.1,
-                response_mime_type="application/json",
-                response_schema=AiReply,
-            ),
-        )
+        resp = _generate(client, types, model, prompt, system)
         reply, problems = validate_reply(AiReply.model_validate_json(resp.text), df, scenario)
         if reply:
             return reply, []
