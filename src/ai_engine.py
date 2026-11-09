@@ -18,8 +18,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SYSTEM_PROMPT_PATH = ROOT / "src" / "system_prompt.txt"
 DEMO_ANSWERS_PATH = ROOT / "src" / "demo_answers.json"
 DEFAULT_MODEL = "gemini-3.8-flash"   # verifica con client.models.list() quali modelli hai
-FALLBACK_MODELS = ["gemini-3.7-flash", "gemini-3.5-flash"]   # usati se il principale e' sovraccarico
-RETRY_WAITS = [1.5, 3.0]                                      # secondi tra i tentativi su 503/429
+FALLBACK_MODELS = ["gemini-3.7-flash"]   # usati se il principale e' sovraccarico
+RETRY_WAITS = [1.5]                                           # secondi tra i tentativi su 503/429
 
 
 def get_api_key(sidebar_value: str = "") -> str:
@@ -66,7 +66,7 @@ def ask(question: str, df, scenario: dict, api_key: str, model: str = DEFAULT_MO
     from google.genai import types
 
     system = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
-    client = genai.Client(api_key=api_key)
+    client = genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=20000))  # 20 s per chiamata
     prompt = (f"SCENARIO: {json.dumps(scenario)}\nRECORD:\n{_records_json(df)}\n"
               f"DOMANDA: {question}")
     problems: list[str] = []
