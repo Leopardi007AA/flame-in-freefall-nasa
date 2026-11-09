@@ -17,7 +17,9 @@ from src.ai_validation import AiReply, validate_reply
 ROOT = Path(__file__).resolve().parent.parent
 SYSTEM_PROMPT_PATH = ROOT / "src" / "system_prompt.txt"
 DEMO_ANSWERS_PATH = ROOT / "src" / "demo_answers.json"
-DEFAULT_MODEL = "gemini-2.5-flash"   # verifica con client.models.list() quali modelli hai
+DEFAULT_MODEL = "gemini-3.8-flash"   # verifica con client.models.list() quali modelli hai
+FALLBACK_MODELS = ["gemini-3.7-flash"]   # usati se il principale e' sovraccarico
+RETRY_WAITS = [1.5]                                           # secondi tra i tentativi su 503/429
 
 
 def get_api_key(sidebar_value: str = "") -> str:
@@ -37,27 +39,39 @@ def _records_json(df) -> str:
     return df[cols].to_json(orient="records", force_ascii=False)
 
 
+def _generate(client, types, model, prompt, system):
+    """Una chiamata a Gemini; su 503/429 riprova, poi prova i modelli di riserva."""
+    last = None
+    for m in [model] + [x for x in FALLBACK_MODELS if x != model]:
+        for wait in [0.0] + RETRY_WAITS:
+            if wait:
+                time.sleep(wait)
+            try:
+                return client.models.generate_content(
+                    model=m, contents=prompt,
+                    config=types.GenerateContentConfig(
+                        system_instruction=system, temperature=0.1,
+                        response_mime_type="application/json", response_schema=AiReply))
+            except Exception as e:
+                code = getattr(e, "code", None)
+                if code not in (429, 500, 503, 504):
+                    raise
+                last = e
+    raise last
+
+
 def ask(question: str, df, scenario: dict, api_key: str, model: str = DEFAULT_MODEL):
     """Interroga Gemini. Restituisce (AiReply validata | None, lista di problemi)."""
     from google import genai            # import tardivo: i test non richiedono la libreria
     from google.genai import types
 
     system = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
-    client = genai.Client(api_key=api_key)
+    client = genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=20000))  # 20 s per chiamata
     prompt = (f"SCENARIO: {json.dumps(scenario)}\nRECORD:\n{_records_json(df)}\n"
               f"DOMANDA: {question}")
     problems: list[str] = []
     for _ in range(2):
-        resp = client.models.generate_content(
-            model=model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                system_instruction=system,
-                temperature=0.1,
-                response_mime_type="application/json",
-                response_schema=AiReply,
-            ),
-        )
+        resp = _generate(client, types, model, prompt, system)
         reply, problems = validate_reply(AiReply.model_validate_json(resp.text), df, scenario)
         if reply:
             return reply, []
@@ -118,7 +132,7 @@ def answer_question(question: str, df, scenario: dict, api_key: str, model: str 
             if reply:
                 return {"source": "ai", "reply": reply, "problems": []}
         except Exception as e:  # rete, quota, chiave errata...
-            problems = [f"chiamata AI non riuscita ({type(e).__name__})"]
+            problems = [f"chiamata AI non riuscita ({type(e).__name__}: {str(e)[:200]})"]
     else:
         problems = ["nessuna chiave API configurata"]
     fb = fallback_answer(question, df, scenario)
