@@ -52,28 +52,37 @@ html,body{margin:0;background:transparent;font-family:'JetBrains Mono',ui-monosp
 .chips{position:absolute;left:18px;right:18px;bottom:14px;display:flex;flex-wrap:wrap;gap:8px}
 .chip{padding:6px 11px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
  font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.9)}
+.chip{white-space:nowrap}
 .badge{color:#ffd2b3;border-color:rgba(255,170,120,.55)}
+.fit{position:absolute;inset:0;transform-origin:50% 100%}
 .streak{position:absolute;left:18px;width:90px;height:2px;border-radius:2px;
  background:linear-gradient(90deg,rgba(0,0,0,0),rgba(160,210,255,.9),rgba(0,0,0,0))}
 @keyframes flicker{0%,100%{transform:scale(1,1) skewX(0deg)}20%{transform:scale(.96,1.05) skewX(1.6deg)}
  45%{transform:scale(1.03,.97) skewX(-1.2deg)}70%{transform:scale(.98,1.04) skewX(.8deg)}}
 @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
 @keyframes streak{0%{transform:translateX(-30px);opacity:0}25%{opacity:1}100%{transform:translateX(240px);opacity:0}}
+@media (max-width:620px){
+ .fit{transform:scale(.68)}
+ .tag{font-size:10px}
+ .badge-tag{top:46px!important}
+ .chip{font-size:9.5px;padding:5px 9px}
+ .chips{left:12px;right:12px;gap:6px}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
 <div class="stage" role="img" aria-label="Fiamma illustrativa: __NAME__, __G__ g, ossigeno __O2__ percento">
 __STREAKS__
-<div class="lean" style="transform:translateX(__SHIFT__px) rotate(__LEAN__deg)">
+<div class="fit"><div class="lean" style="transform:translateX(__SHIFT__px) rotate(__LEAN__deg)">
   <div style="__HALO__"></div>
   <div class="flame" style="__FLAME__">
     <div class="layer" style="__OUTER__"></div>
     <div class="layer" style="__MID__"></div>
     <div class="layer" style="__CORE__"></div>
   </div>
-</div>
+</div></div>
 <div class="tag" style="left:18px;top:16px">g = __G__</div>
 <div class="tag" style="right:18px;top:16px">__NAME__</div>
-<div class="tag" style="left:50%;top:16px;transform:translateX(-50%)"><span class="chip badge">Resa illustrativa · non CFD</span></div>
+<div class="tag badge-tag" style="left:50%;top:16px;transform:translateX(-50%)"><span class="chip badge">Resa illustrativa · non CFD</span></div>
 <div class="chips"><span class="chip">O₂ __O2__ %</span><span class="chip">P __P__ psia</span><span class="chip">Flusso __FLOW__ cm/s</span></div>
 </div></body></html>"""
 
