@@ -18,14 +18,14 @@ RANGES = {"o2": ("o2_min", "o2_max", 0, 100),
           "flusso": ("flusso_min_cm_s", "flusso_max_cm_s", 0, 100)}
 errors = []
 
-df = pd.read_csv(PATH, encoding="utf-8")
+df = pd.read_csv(PATH, encoding="utf-8", index_col=False)
 if list(df.columns) != COLS:
     errors.append(f"Colonne diverse dallo schema v1. Attese: {COLS}")
 else:
     if df["id"].duplicated().any():
         dup = df.loc[df["id"].duplicated(), "id"].astype(str)
         errors.append("id duplicati: " + ", ".join(dup))
-    for i, r in df.iterrows():
+    for i, (_, r) in enumerate(df.iterrows()):
         row = f"riga {i + 2} ({r['id']})"
         for col in ("id", "nome", "url_psi", "fonte_note", "verificato_da"):
             if pd.isna(r[col]):
