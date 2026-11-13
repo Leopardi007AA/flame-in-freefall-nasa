@@ -9,7 +9,7 @@ from pathlib import Path
 import pandas as pd
 
 from src import data_loader, scoring
-from src.ai_engine import RateLimiter, fallback_answer, normalize_question
+from src.ai_engine import RateLimiter, fallback_answer, load_demo_answers, normalize_question
 from src.ai_validation import AiReply, validate_reply
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -18,6 +18,14 @@ ISS = {"gravity": "iss", "o2": 21, "pressure": 14.7, "flow": 10}
 
 
 class TestLoader(unittest.TestCase):
+    def test_demo_answers_are_valid_on_real_data(self):
+        df = data_loader.load_investigations()
+        answers = load_demo_answers()
+        self.assertGreaterEqual(len(answers), 5)
+        sc = {"gravity": "mars", "o2": 30.0, "pressure": 10.2, "flow": 5.0}
+        for q in answers:
+            self.assertIsNotNone(fallback_answer(q, df, sc, answers), q)
+
     def test_real_csv_loads_ranks_and_is_not_mock(self):
         df = data_loader.load_investigations()
         self.assertFalse(data_loader.is_mock(df))
