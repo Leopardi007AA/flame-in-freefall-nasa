@@ -26,7 +26,7 @@ INVESTIGATIONS = [
     ("PSI-107", "SPICE", "SPICE coflow smoke point microgravity"),
     ("PSI-106", "SLICE", "Structure and Lift-Off in Combustion Experiment SLICE"),
     ("PSI-47", "DAFT", "Dust and Aerosol Measurement Feasibility Test P-Trak"),
-    ("PSI-142", "Fiamme fredde", "counterflow cool flames extinction oxygen stretch")
+    ("PSI-39", "Fiamme fredde", "counterflow cool flames extinction oxygen stretch")
 ]
 
 def search(q, size=5):

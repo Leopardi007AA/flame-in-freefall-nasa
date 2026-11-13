@@ -4,7 +4,7 @@ Le risposte attese sono calcolate dal CSV attuale. Se il CSV cambia, rigenerare 
 
 | # | Tipo | Domanda | Risposta corretta del Copilota | Id attesi |
 |---|---|---|---|---|
-| 1 | Risposta nei dati | Quali esperimenti hanno studiato combustibili liquidi? | Elenca le righe giuste con id citati | PSI-69, PSI-142 |
+| 1 | Risposta nei dati | Quali esperimenti hanno studiato combustibili liquidi? | Elenca le righe giuste con id citati | PSI-69, PSI-39 |
 | 2 | Risposta nei dati | Quali esperimenti usano combustibili gassosi? | Elenca le righe giuste con id citati | PSI-20, PSI-10, PSI-106 |
 | 3 | Risposta nei dati | Quali esperimenti usano combustibili solidi? | Elenca le righe giuste con id citati | PSI-25, PSI-98, PSI-99, PSI-100 |
 | 4 | Risposta nei dati | Quali esperimenti sono stati eseguiti su Cygnus? | Elenca le righe giuste con id citati | PSI-98, PSI-99, PSI-100 |
@@ -15,7 +15,7 @@ Le risposte attese sono calcolate dal CSV attuale. Se il CSV cambia, rigenerare 
 | 9 | Risposta nei dati | A che flusso d'aria è stato condotto Saffire-I? | 20 cm/s, citando PSI-98 | PSI-98 |
 | 10 | Risposta nei dati | Qual è il flusso d'aria massimo di BASS-II? | 40 cm/s (valore della scheda PSI), citando PSI-25 | PSI-25 |
 | 11 | Confronto | Confronta BASS-II e Saffire-I per flusso d'aria. | Tabella coerente con il CSV | PSI-25, PSI-98 |
-| 12 | Confronto | Confronta FLEX e Cool Flames per tipo di combustibile. | Tabella coerente con il CSV | PSI-69, PSI-142 |
+| 12 | Confronto | Confronta FLEX e Cool Flames per tipo di combustibile. | Tabella coerente con il CSV | PSI-69, PSI-39 |
 | 13 | Confronto | Confronta ACME BRE e ACME Flame Design per combustibili. | Tabella coerente con il CSV | PSI-20, PSI-10 |
 | 14 | Confronto | Confronta Saffire-I e Saffire-II per flusso d'aria. | Saffire-I 20 cm/s; Saffire-II «nessun dato» | PSI-98, PSI-99 |
 | 15 | Confronto | Confronta BASS-II e FLEX per ossigeno. | BASS-II 14-21% e FLEX 12-30%, entrambi con intervallo | PSI-25, PSI-69 |

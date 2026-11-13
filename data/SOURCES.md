@@ -7,7 +7,10 @@ La scheda «Dati reali» dell'app mostra «Nessun dato» finché non ci sono tab
 ## Tabella degli esperimenti (`data/investigations.csv`)
 * **Nomi:** controllati sull'elenco ufficiale «PSI investigations by research area» (sezione Combustion Science):
   https://www.nasa.gov/physical-sciences-informatics-psi/psi-investigations-by-research-area/
-* **Id PSI e testi delle schede:** presi dalle schede `https://psi.nasa.gov/physci/repo/data/investigations/PSI-<numero>`.
+* **Righe 11-19 (bozza, `verificato_da = Claude-bozza`):** nome dall'elenco ufficiale, id da tabelle di archivi pubblici di altri team
+  (github.com/OSAMABASAM/NASA_flame_in_freefall, github.com/YoussefHegazy74/flame-in-freefall); nessun valore numerico. Due voci (ACME CLD, ACME CFI-G)
+  non sono nell'elenco ufficiale. Cool Flames: id corretto da PSI-142 a PSI-39 (stesse fonti). **Tutti da verificare sul sito PSI.**
+* **Id PSI e testi delle schede (righe 1-10):** presi dalle schede `https://psi.nasa.gov/physci/repo/data/investigations/PSI-<numero>`.
   L'elenco ufficiale non riporta gli id: **gli id vanno riverificati a mano sul sito PSI**.
 * **Valori numerici da articoli NASA NTRS** (ogni riga cita la frase della fonte in `fonte_note`):
   * PSI-69 (FLEX): ossigeno 12-30%, pressione 0.7 e 1 atm (= 10.3 e 14.7 psia) da NTRS 20130014061 (da verificare che il paper coincida con FLEX).
