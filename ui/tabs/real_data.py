@@ -60,8 +60,8 @@ def render(tables: dict | None = None) -> None:
     tables = tables or discover_tables()
     if not tables:
         glass_card("Tabelle originali NASA non ancora caricate",
-                   badge("NESSUN DATO", "nodata") + "<p>In <code>data/raw/</code> ci sono solo file di esempio, "
-                   "che non mostriamo come dati reali. Appena i download originali da NASA PSI "
+                   badge("NESSUN DATO", "nodata") + "<p>In <code>data/raw/</code> non ci sono ancora tabelle originali, "
+                   "e i file di esempio non li mostriamo come dati reali. Appena i download originali da NASA PSI "
                    "saranno al loro posto, qui compare l'esploratore.</p>")
         return
     name = st.selectbox("Tabella", list(tables))
