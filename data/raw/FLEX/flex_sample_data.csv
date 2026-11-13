@@ -1,5 +1,0 @@
-	A	B	C	D	E	F
-1	drop_id	ambient_temp_C	o2_fraction	pressure_atm	droplet_radius_mm	burn_rate
-2	1	23.5	0.21	1	1.5	0.023
-3	2	23.8	0.3	1.5	1.5	0.031
-4	3	24	0.4	2	1.5	0.042

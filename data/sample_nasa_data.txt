@@ -1,3 +1,0 @@
-Esperimento BASS-II: Test di combustione su materiali solidi (es. acrilico e cotone).
-Concentrazione O2: 30%. Flusso d'aria: 5 cm/s.
-Risultato: Infiammabilità fortemente aumentata rispetto all'atmosfera terrestre. La fiamma persiste senza moti convettivi naturali.
