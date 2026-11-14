@@ -215,12 +215,16 @@ def disegna_griglia(risultato: dict, scenario: dict) -> bool:
                 if len(nomi) > 8:
                     elenco += f"<br>… e altri {len(nomi) - 8}"
                 corpo = (
-                    '<div class="gap-main">● TESTATO</div>'
+                    f'<div class="gap-main">● TESTATO · {len(nomi)}</div>'
                     f'<div class="gap-tip">Esperimenti:<br>{elenco}</div>'
                 )
                 extra = ' tabindex="0"'
             else:
-                corpo = '<div class="gap-main">—</div>' + badge("NESSUN DATO", "nodata")
+                # Una sola etichetta per la cella dello scenario; le altre celle vuote
+                # mostrano solo «—» (la legenda sotto spiega il simbolo).
+                corpo = '<div class="gap-main">—</div>'
+                if adesso:
+                    corpo += badge("NESSUN DATO", "nodata")
                 extra = ""
 
             if adesso:
@@ -235,7 +239,7 @@ def disegna_griglia(risultato: dict, scenario: dict) -> bool:
 
 def disegna_note(risultato: dict, scenario: dict, evidenziata: bool) -> None:
     righe = [
-        "● TESTATO = almeno un esperimento copre quella gravità e quell'ossigeno. — = nessun dato.",
+        "● TESTATO · n = n esperimenti coprono quella gravità e quell'ossigeno (passa sopra la cella per i nomi). — = nessun dato nelle nostre fonti.",
         "Le colonne Marte e Luna restano vuote finché nessun dato le giustifica.",
     ]
     if risultato["senza_ossigeno"]:
