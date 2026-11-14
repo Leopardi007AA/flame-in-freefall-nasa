@@ -1,1 +1,78 @@
-{}
+{
+ "Mostrami Marte con 30% di ossigeno e poco flusso": {
+  "gravity": "mars",
+  "o2": 30.0,
+  "flow": 2.0,
+  "highlight_ids": [
+   "PSI-69",
+   "PSI-25"
+  ],
+  "citations": [
+   "PSI-69",
+   "PSI-25"
+  ],
+  "answer": "Nessun dato a 0,38 g: tutti gli esperimenti della tabella sono in microgravità. Gli unici con valori di ossigeno sono PSI-69 (FLEX, 12-30% di O2) e PSI-25 (BASS-II, 14-21%); li evidenzio come i più vicini a questo scenario."
+ },
+ "Mostrami la Luna con 26,5% di ossigeno": {
+  "gravity": "moon",
+  "o2": 26.5,
+  "highlight_ids": [
+   "PSI-69"
+  ],
+  "citations": [
+   "PSI-69"
+  ],
+  "answer": "Nessun dato a 0,16 g: la tabella non contiene misure alla gravità lunare. Il record più vicino è PSI-69 (FLEX), che ha testato ossigeno tra 12 e 30% in microgravità, intervallo che comprende 26,5%."
+ },
+ "Cosa sappiamo della combustione a gravità lunare?": {
+  "gravity": "moon",
+  "highlight_ids": [],
+  "citations": [],
+  "answer": "Nessun dato: nella tabella nessun esperimento dichiara gravità tra 0 e 1 g. Questa è una lacuna: i record coprono solo la microgravità."
+ },
+ "Quali esperimenti hanno dati sull'ossigeno?": {
+  "highlight_ids": [
+   "PSI-69",
+   "PSI-25"
+  ],
+  "citations": [
+   "PSI-69",
+   "PSI-25"
+  ],
+  "answer": "Solo due: PSI-69 (FLEX) con O2 tra 12 e 30% e PSI-25 (BASS-II) con O2 tra 14 e 21%. Per gli altri esperimenti il valore non è disponibile nelle fonti consultate."
+ },
+ "Quali esperimenti hanno un flusso d'aria noto?": {
+  "highlight_ids": [
+   "PSI-25",
+   "PSI-98"
+  ],
+  "citations": [
+   "PSI-25",
+   "PSI-98"
+  ],
+  "answer": "PSI-25 (BASS-II) fino a 40 cm/s e PSI-98 (Saffire-I) a 20 cm/s. Per gli altri non c'è un valore dichiarato nelle fonti."
+ },
+ "Qual è la temperatura della fiamma a 0,16 g?": {
+  "highlight_ids": [],
+  "citations": [],
+  "answer": "Nessun dato: la tabella non contiene temperature della fiamma né misure a 0,16 g."
+ },
+ "Cosa ha studiato Saffire-I?": {
+  "highlight_ids": [
+   "PSI-98"
+  ],
+  "citations": [
+   "PSI-98"
+  ],
+  "answer": "PSI-98 (Spacecraft Fire Experiment-I) ha studiato quanto rapidamente cresce un grande incendio in bassa gravità e i limiti di infiammabilità, con flusso d'aria costante di 20 cm/s. L'esperimento è stato eseguito sulla navetta Cygnus dopo la separazione dalla ISS."
+ },
+ "Quali pressioni sono state testate?": {
+  "highlight_ids": [
+   "PSI-69"
+  ],
+  "citations": [
+   "PSI-69"
+  ],
+  "answer": "Solo PSI-69 (FLEX) ha una pressione riportata: tra 10.3 e 14.7 psia (0.7 e 1 atm). Per gli altri esperimenti nessun dato."
+ }
+}
