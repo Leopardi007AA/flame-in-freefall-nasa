@@ -1,13 +1,27 @@
-# Crediti e fonti
+# Credits and sources
 
-Progetto indipendente per il NASA Space Apps Challenge 2026 «Flame in Freefall»: non affiliato né approvato dalla NASA.
+Independent project for the NASA Space Apps Challenge 2026 "Flame in Freefall". Not affiliated with or endorsed by NASA.
 
-## Fonti
-- NASA Physical Sciences Informatics (PSI): https://psi.nasa.gov/ (schede PSI-10, 20, 25, 47, 69, 98, 99, 100, 106, 142 citate in data/investigations.csv)
-- NASA Technical Reports Server (NTRS): https://ntrs.nasa.gov/ (articoli in data/papers.json; da_controllare=true finché non curati)
-- Guida al database PSI: https://science.nasa.gov/wp-content/uploads/2024/11/psi-database-guide.pdf
+## Data
+- NASA Physical Sciences Informatics (PSI): https://psi.nasa.gov/ — investigation pages PSI-10, 20, 21, 22, 23, 25, 26, 39, 47, 68, 69, 98, 99, 100, 101, 102, 106, 107, 159 (DOI, platform and test tables, 14 Nov 2026).
+- NASA Technical Reports Server (NTRS): https://ntrs.nasa.gov/ — papers listed in `data/papers.json` and quoted in `data/investigations.csv` (`fonte_note`).
+- PSI database guide: https://science.nasa.gov/wp-content/uploads/2024/11/psi-database-guide.pdf
+- Terms of use of PSI data: not copied into this repository; NASA data are cited with their DOI.
 
-## Da completare prima della consegna
-- DOI di ogni investigazione (sul sito PSI)
-- Condizioni d'uso dei dati PSI
-- Sostituire i file di esempio in data/raw/ con i download originali
+## Software (third-party, open source)
+| Package | License |
+|---|---|
+| Streamlit | Apache-2.0 |
+| pandas | BSD-3-Clause |
+| Plotly | MIT |
+| pydantic | MIT |
+| google-genai | Apache-2.0 |
+| requests | Apache-2.0 |
+
+Google Gemini API is used for the in-app Copilot (service, not redistributed).
+
+## Our own work
+Code and text of this repository are released under Apache-2.0 (the Space Apps default for original content).
+
+## Use of SI (AI)
+Parts of the code and of the data summaries were produced with the assistance of an AI assistant (Claude, Anthropic) and reviewed by the team. The in-app Copilot uses Google Gemini; its answers are validated by code. See `README.md` and `data/SOURCES.md`.
