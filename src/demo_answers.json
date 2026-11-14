@@ -34,14 +34,24 @@
   "highlight_ids": [
    "PSI-69",
    "PSI-25",
-   "PSI-98"
+   "PSI-98",
+   "PSI-99",
+   "PSI-10",
+   "PSI-39",
+   "PSI-68",
+   "PSI-159"
   ],
   "citations": [
    "PSI-69",
    "PSI-25",
-   "PSI-98"
+   "PSI-98",
+   "PSI-99",
+   "PSI-10",
+   "PSI-39",
+   "PSI-68",
+   "PSI-159"
   ],
-  "answer": "Tre: PSI-69 (FLEX) con O2 tra 12 e 30%, PSI-25 (BASS-II) tra 14 e 21% e PSI-98 (Saffire-I) con 21% previsto prima del volo. Per gli altri esperimenti il valore non è disponibile nelle fonti consultate."
+  "answer": "Otto: PSI-69 (FLEX) tra 12 e 30% di O2, PSI-25 (BASS-II) tra 14 e 21%, PSI-159 tra 38 e 39.4%, PSI-98 (Saffire-I) 21.5%, PSI-99 (Saffire-II) tra 21.5 e 22.1%, PSI-10 tra 20.4 e 20.7%, PSI-39 (CFI) 21% e PSI-68 (FLEX-2) 17%. Per gli altri il valore non è disponibile nelle fonti consultate."
  },
  "Quali esperimenti hanno un flusso d'aria noto?": {
   "highlight_ids": [
@@ -49,16 +59,24 @@
    "PSI-98",
    "PSI-99",
    "PSI-100",
-   "PSI-106"
+   "PSI-106",
+   "PSI-107",
+   "PSI-102",
+   "PSI-101",
+   "PSI-68"
   ],
   "citations": [
    "PSI-25",
    "PSI-98",
    "PSI-99",
    "PSI-100",
-   "PSI-106"
+   "PSI-106",
+   "PSI-107",
+   "PSI-102",
+   "PSI-101",
+   "PSI-68"
   ],
-  "answer": "PSI-25 (BASS-II) fino a 40 cm/s, PSI-98 (Saffire-I) 20 cm/s, PSI-99 (Saffire-II) 20 cm/s, PSI-100 (Saffire-III) 30 cm/s (valore previsto) e PSI-106 (SLICE) da 18 a 71 cm/s. Per gli altri non c'è un valore dichiarato."
+  "answer": "PSI-25 (BASS-II) fino a 40 cm/s, PSI-98 e PSI-99 (Saffire) 20 cm/s, PSI-100 (Saffire-III) 30 cm/s, PSI-106 (SLICE) da 18 a 71 cm/s, PSI-107 (SPICE) da 36.39 a 57.08 cm/s, PSI-102 (SAME) da 5 a 10 cm/s, PSI-101 (SAME-R) 8.1 cm/s e PSI-68 (FLEX-2) 0.1 cm/s. Per gli altri non c'è un valore dichiarato."
  },
  "Qual è la temperatura della fiamma a 0,16 g?": {
   "highlight_ids": [],
@@ -72,17 +90,23 @@
   "citations": [
    "PSI-98"
   ],
-  "answer": "PSI-98 (Spacecraft Fire Experiment-I) ha studiato quanto rapidamente cresce un grande incendio in bassa gravità e i limiti di infiammabilità, con flusso d'aria costante di 20 cm/s. L'esperimento è stato eseguito sulla navetta Cygnus dopo la separazione dalla ISS."
+  "answer": "PSI-98 (Spacecraft Fire Experiment-I) ha studiato quanto rapidamente cresce un grande incendio in bassa gravità e i limiti di infiammabilità, con flusso d'aria di 20 cm/s e ossigeno al 21.5%."
  },
  "Quali pressioni sono state testate?": {
   "highlight_ids": [
    "PSI-69",
-   "PSI-99"
+   "PSI-99",
+   "PSI-10",
+   "PSI-39",
+   "PSI-68"
   ],
   "citations": [
    "PSI-69",
-   "PSI-99"
+   "PSI-99",
+   "PSI-10",
+   "PSI-39",
+   "PSI-68"
   ],
-  "answer": "PSI-69 (FLEX) tra 10.3 e 14.7 psia (0.7 e 1 atm) e PSI-99 (Saffire-II) a 14.5 psia (100 kPa). Per gli altri esperimenti nessun dato."
+  "answer": "PSI-69 (FLEX) tra 10.3 e 14.7 psia, PSI-68 (FLEX-2) 7.35 psia (0.5 atm), PSI-99 (Saffire-II) 14.5 psia, PSI-39 (CFI) 14.7 psia e PSI-10 tra 14.87 e 14.96 psia. Per gli altri esperimenti nessun dato."
  }
 }
