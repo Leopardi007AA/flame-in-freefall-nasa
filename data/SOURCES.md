@@ -24,7 +24,7 @@ La scheda «Dati reali» dell'app mostra «Nessun dato» finché non ci sono tab
 ## Schede PSI ufficiali (14 nov 2026)
 * **DOI, piattaforma e id di tutte le 19 righe** sono presi dal testo delle schede del sito PSI (copiato da un membro del team). I DOI sono quelli del dataset PSI (prefisso 10.60555).
 * **Valori dalle tabelle di dati delle schede** (`verificato_da = Claude-PSI` sulle righe che prima erano bozza): PSI-98 e PSI-99 (O2 21.5 e 21.5-22.1%, flusso 20 cm/s), PSI-39 (1 atm, O2 21%), PSI-10 (O2 20.4-20.7%, 1.012-1.018 atm), PSI-68 (O2 17%, 0.5 atm, 0.1 cm/s), PSI-102 (5-10 cm/s), PSI-101 (8.1 cm/s), PSI-159 (O2 38-39.4%), PSI-107 (36.39-57.08 cm/s). atm convertiti in psia (x14.696).
-* **Da ricontrollare:** PSI-98 e PSI-100 risultano su ISS nella scheda; la pubblicazione li descrive su Cygnus. Il flusso di PSI-68 (0.1 cm/s) è quello della tabella: unità non confermata.
+* **Verifica del 14 nov (testo delle schede):** PSI-98 e PSI-100: il campo «Flight Platform» dice ISS, ma il testo della scheda dice che l'esperimento è stato eseguito sul Cygnus dopo lo sgancio dalla ISS: piattaforma = Cygnus. PSI-68: l'intestazione conferma cm/s; la tabella dà O2 17-30%, 0.5-3.0 atm, 0.1-5 cm/s (pressione limitata a 0.5-1.0 atm per il limite di schema). PSI-25: aggiunto O2 22.2% dalla tabella (14-22.2). PSI-159: pressione ~13.7 psia (0.944 bar).
 * Le righe senza valori numerici (PSI-20, 47, 26, 22, 23, 21) non hanno colonne O2/pressione/flusso nelle schede incollate: restano vuote.
 
 ## Articoli (`data/papers.json`)
