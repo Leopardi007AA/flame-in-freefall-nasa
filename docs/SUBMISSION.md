@@ -33,7 +33,7 @@ Python, Streamlit, pandas, Plotly, pydantic, google-genai, requests; hosted on S
 ## Links (fill in before submitting)
 - Live app: https://flame-in-freefall-nasa-fzgfghjn5vfzmfhukvnt58.streamlit.app/
 - Code: https://github.com/Leopardi007AA/flame-in-freefall-nasa
-- Demo (video up to 30 s or slides): <ADD LINK — public, no password>
+- Demo (video up to 30 s or slides): [<ADD LINK — public, no password>](https://flame-in-freefall-nasa-fzgfghjn5vfzmfhukvnt58.streamlit.app/#copilota-ai)
 
 ## Disclaimer
 Independent project for the NASA Space Apps Challenge; not affiliated with or endorsed by NASA.
