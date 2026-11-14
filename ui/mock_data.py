@@ -79,4 +79,27 @@ def show_mock_banner() -> None:
         st.markdown(
             '<div style="border:1px solid #ff8a4c; background:rgba(255,138,76,.15); border-radius:16px; padding:12px 16px; color:#ffb347; font-weight:600;">⚠ DATI DI PROVA, NON REALI</div>',
             unsafe_allow_html=True,
-        )
+        )        
+        
+            
+        
+def get_mock_tables() -> dict:
+    """Due tabelle finte per provare l'esploratore. Una colonna è vuota apposta."""
+    bass = pd.DataFrame({
+        "tempo_s": [0, 5, 10, 15, 20, 25, 30, 35],
+        "o2_percent": [21, 21, 30, 30, 40, 40, 50, 50],
+        "velocita_mm_s": [1.2, 1.5, 2.1, None, 3.0, 3.4, None, 4.2],
+        "combustibile": ["PMMA", "PMMA", "cotone", "cotone", "PMMA", "cotone", "PMMA", "cotone"],
+        "colonna_vuota": [None] * 8,
+    })
+    bass.attrs["file"] = "MOCK_bass2.csv"
+
+    flex = pd.DataFrame({
+        "pressione_psia": [10.2, 10.2, 12.0, 12.0, 14.7, 14.7],
+        "flusso_cm_s": [5, 10, 5, 10, 5, 10],
+        "altezza_fiamma_mm": [12.5, 14.0, None, 15.2, 18.1, 19.3],
+        "esito": ["fiamma", "fiamma", "spenta", "fiamma", "fiamma", "fiamma"],
+    })
+    flex.attrs["file"] = "MOCK_flex.csv"
+
+    return {"MOCK BASS-II": bass, "MOCK FLEX": flex}

@@ -4,8 +4,8 @@ sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent))
 
 import streamlit as st
 from ui.theme import apply_theme
-from ui.mock_data import get_mock_data, show_mock_banner
-from ui.tabs import compare, gaps
+from ui.mock_data import get_mock_data, get_mock_tables
+from ui.tabs import compare, gaps, real_data
 
 apply_theme()
 
@@ -21,8 +21,7 @@ with tab_confronto:
     compare.render(df, scenario, highlight_ids)
 
 with tab_dati:
-    show_mock_banner()
-    st.write("Scheda Dati reali (da costruire)")
+    real_data.render(get_mock_tables())
 
 with tab_lacune:
     gaps.render(df, scenario, highlight_ids)
