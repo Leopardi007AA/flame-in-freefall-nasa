@@ -18,8 +18,16 @@ ISS = {"gravity": "iss", "o2": 21, "pressure": 14.7, "flow": 10}
 
 
 class TestLoader(unittest.TestCase):
-    def test_mock_fallback_and_flag(self):
+    def test_real_csv_loads_ranks_and_is_not_mock(self):
         df = data_loader.load_investigations()
+        self.assertFalse(data_loader.is_mock(df))
+        self.assertGreaterEqual(len(df), 10)
+        r = scoring.rank(df, {"gravity": "moon", "o2": 30.0, "pressure": 10.2, "flow": 5.0})
+        self.assertEqual(len(r), len(df))
+        self.assertFalse((df["o2_min"] == 0).any())
+
+    def test_mock_fallback_and_flag(self):
+        df = data_loader.load_investigations(data_loader.MOCK_PATH)
         self.assertEqual(len(df), 6)
         self.assertTrue(data_loader.is_mock(df))
         self.assertTrue(df["o2_min"].isna().any())          # celle vuote = NaN, mai 0
@@ -58,7 +66,7 @@ class TestValidateCsv(unittest.TestCase):
 
 class TestScoring(unittest.TestCase):
     def setUp(self):
-        self.df = data_loader.load_investigations()
+        self.df = data_loader.load_investigations(data_loader.MOCK_PATH)
 
     def test_range_and_order(self):
         r = scoring.rank(self.df, ISS)
@@ -82,7 +90,7 @@ class TestScoring(unittest.TestCase):
 
 class TestAiValidation(unittest.TestCase):
     def setUp(self):
-        self.df = data_loader.load_investigations()
+        self.df = data_loader.load_investigations(data_loader.MOCK_PATH)
 
     def test_valid_reply_passes(self):
         r = AiReply(answer="MOCK-1 copre O2 da 21 a 35.", citations=["MOCK-1"], highlight_ids=["MOCK-1"])
@@ -115,7 +123,7 @@ class TestAiValidation(unittest.TestCase):
 
 class TestFallbackAndLimiter(unittest.TestCase):
     def test_fallback_is_revalidated(self):
-        df = data_loader.load_investigations()
+        df = data_loader.load_investigations(data_loader.MOCK_PATH)
         answers = {normalize_question("Che cosa copre MOCK-1?"):
                    {"answer": "MOCK-1 copre O2 da 21 a 35.", "citations": ["MOCK-1"]}}
         self.assertIsNotNone(fallback_answer("che cosa copre mock-1", df, MARS, answers))

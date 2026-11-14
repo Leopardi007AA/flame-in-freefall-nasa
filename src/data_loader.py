@@ -15,9 +15,9 @@ NUM_COLS = ["o2_min", "o2_max", "pressione_min_psia", "pressione_max_psia",
             "flusso_min_cm_s", "flusso_max_cm_s"]
 
 
-def load_investigations() -> pd.DataFrame:
-    """Una riga per esperimento. Celle vuote = NaN (mai 0)."""
-    path = DATA_DIR / "investigations.csv"
+def load_investigations(path: Path | None = None) -> pd.DataFrame:
+    """Una riga per esperimento. Celle vuote = NaN (mai 0). `path` serve ai test."""
+    path = path or DATA_DIR / "investigations.csv"
     if not path.exists():
         path = MOCK_PATH
     df = pd.read_csv(path, encoding="utf-8")
