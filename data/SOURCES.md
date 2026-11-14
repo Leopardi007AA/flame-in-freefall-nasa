@@ -1,22 +1,23 @@
-# Fonti dei dati grezzi
+# Fonti dei dati
 
-> ATTENZIONE: i due file qui sotto sono **file di esempio di pochi byte**, non le tabelle originali scaricate da NASA PSI.
-> Non vanno presentati come dati NASA reali. Vanno sostituiti con i download originali (e hash ricalcolati) appena possibile.
+## Stato dei dati grezzi
+`data/raw/` è **vuota di proposito**: i file di esempio che c'erano non erano download originali NASA e sono stati rimossi.
+La scheda «Dati reali» dell'app mostra «Nessun dato» finché non ci sono tabelle originali scaricate da NASA PSI.
 
-## BASS-II
-* **Fonte:** https://psi.nasa.gov/physci/repo/data/investigations/PSI-25
-* **DOI:** da verificare sul sito PSI (non confermato)
-* **File:** data/raw/BASS-II/bass_ii_sample_data.csv
-* **Origine del file:** esempio/segnaposto, NON scaricato da PSI
-* **SHA-256:** 6bffc796ef63813079f53768c4880cbf64dc4aa4ab41bd18e06559eb7b7ba8c1
-* **Licenza / condizioni d'uso:** da copiare dal sito PSI (non verificata)
-* **Note:** colonne descritte in data/raw/BASS-II/COLUMNS.md
+## Tabella degli esperimenti (`data/investigations.csv`)
+* **Nomi:** controllati sull'elenco ufficiale «PSI investigations by research area» (sezione Combustion Science):
+  https://www.nasa.gov/physical-sciences-informatics-psi/psi-investigations-by-research-area/
+* **Id PSI e testi delle schede:** presi dalle schede `https://psi.nasa.gov/physci/repo/data/investigations/PSI-<numero>`.
+  L'elenco ufficiale non riporta gli id: **gli id vanno riverificati a mano sul sito PSI**.
+* **Valori numerici da articoli NASA NTRS** (ogni riga cita la frase della fonte in `fonte_note`):
+  * PSI-69 (FLEX): ossigeno 12-30%, pressione 0.7 e 1 atm (= 10.3 e 14.7 psia) da NTRS 20130014061 (da verificare che il paper coincida con FLEX).
+  * PSI-25 (BASS-II): ossigeno 14-21% da NTRS 20150019858 (da verificare); flusso fino a 40 cm/s dalla scheda PSI.
+  * PSI-98 (Saffire-I): flusso 20 cm/s, confermato da NTRS 20170008805.
+* **DOI:** non verificati, colonna lasciata vuota. Da compilare solo dopo controllo su doi.org o sulla scheda PSI.
+* Cella vuota = dato sconosciuto. Mai 0, mai stime.
 
-## FLEX
-* **Fonte:** https://psi.nasa.gov/physci/repo/data/investigations/PSI-69
-* **DOI:** da verificare sul sito PSI (non confermato)
-* **File:** data/raw/FLEX/flex_sample_data.csv
-* **Origine del file:** esempio/segnaposto, NON scaricato da PSI
-* **SHA-256:** 3dd6e26a7ae6f675902477106f9a3882355a0b845e1ac4e7db4c7e95fee13e54
-* **Licenza / condizioni d'uso:** da copiare dal sito PSI (non verificata)
-* **Note:** colonne descritte in data/raw/FLEX/COLUMNS.md. Pressione in atm (x 14,696 = psia), O2 come frazione (0.21 = 21%).
+## Articoli (`data/papers.json`)
+Elenco curato di articoli NTRS; il campo `da_controllare` resta `true` finché titolo, autori e anno non sono controllati.
+
+## Licenza / condizioni d'uso
+Da copiare dal sito PSI (non verificata).
