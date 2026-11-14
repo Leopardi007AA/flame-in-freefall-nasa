@@ -17,7 +17,7 @@ from src.ai_validation import AiReply, validate_reply
 ROOT = Path(__file__).resolve().parent.parent
 SYSTEM_PROMPT_PATH = ROOT / "src" / "system_prompt.txt"
 DEMO_ANSWERS_PATH = ROOT / "src" / "demo_answers.json"
-DEFAULT_MODEL = "gemini-2.5-flash"   # verifica con client.models.list() quali modelli hai
+DEFAULT_MODEL = "gemini-3.8-flash"   # verifica con client.models.list() quali modelli hai
 
 
 def get_api_key(sidebar_value: str = "") -> str:
