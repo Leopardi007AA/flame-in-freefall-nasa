@@ -11,7 +11,7 @@
    "PSI-69",
    "PSI-25"
   ],
-  "answer": "Nessun dato a 0,38 g: tutti gli esperimenti della tabella sono in microgravità. Gli unici con valori di ossigeno sono PSI-69 (FLEX, 12-30% di O2) e PSI-25 (BASS-II, 14-21%); li evidenzio come i più vicini a questo scenario."
+  "answer": "Nessun dato a 0,38 g: tutti gli esperimenti della tabella sono in microgravità. Tra quelli con valori di ossigeno, i più vicini a questo scenario sono PSI-69 (FLEX, 12-30% di O2) e PSI-25 (BASS-II, 14-21%); li evidenzio."
  },
  "Mostrami la Luna con 26,5% di ossigeno": {
   "gravity": "moon",
@@ -33,24 +33,32 @@
  "Quali esperimenti hanno dati sull'ossigeno?": {
   "highlight_ids": [
    "PSI-69",
-   "PSI-25"
+   "PSI-25",
+   "PSI-98"
   ],
   "citations": [
    "PSI-69",
-   "PSI-25"
+   "PSI-25",
+   "PSI-98"
   ],
-  "answer": "Solo due: PSI-69 (FLEX) con O2 tra 12 e 30% e PSI-25 (BASS-II) con O2 tra 14 e 21%. Per gli altri esperimenti il valore non è disponibile nelle fonti consultate."
+  "answer": "Tre: PSI-69 (FLEX) con O2 tra 12 e 30%, PSI-25 (BASS-II) tra 14 e 21% e PSI-98 (Saffire-I) con 21% previsto prima del volo. Per gli altri esperimenti il valore non è disponibile nelle fonti consultate."
  },
  "Quali esperimenti hanno un flusso d'aria noto?": {
   "highlight_ids": [
    "PSI-25",
-   "PSI-98"
+   "PSI-98",
+   "PSI-99",
+   "PSI-100",
+   "PSI-106"
   ],
   "citations": [
    "PSI-25",
-   "PSI-98"
+   "PSI-98",
+   "PSI-99",
+   "PSI-100",
+   "PSI-106"
   ],
-  "answer": "PSI-25 (BASS-II) fino a 40 cm/s e PSI-98 (Saffire-I) a 20 cm/s. Per gli altri non c'è un valore dichiarato nelle fonti."
+  "answer": "PSI-25 (BASS-II) fino a 40 cm/s, PSI-98 (Saffire-I) 20 cm/s, PSI-99 (Saffire-II) 20 cm/s, PSI-100 (Saffire-III) 30 cm/s (valore previsto) e PSI-106 (SLICE) da 18 a 71 cm/s. Per gli altri non c'è un valore dichiarato."
  },
  "Qual è la temperatura della fiamma a 0,16 g?": {
   "highlight_ids": [],
@@ -68,11 +76,13 @@
  },
  "Quali pressioni sono state testate?": {
   "highlight_ids": [
-   "PSI-69"
+   "PSI-69",
+   "PSI-99"
   ],
   "citations": [
-   "PSI-69"
+   "PSI-69",
+   "PSI-99"
   ],
-  "answer": "Solo PSI-69 (FLEX) ha una pressione riportata: tra 10.3 e 14.7 psia (0.7 e 1 atm). Per gli altri esperimenti nessun dato."
+  "answer": "PSI-69 (FLEX) tra 10.3 e 14.7 psia (0.7 e 1 atm) e PSI-99 (Saffire-II) a 14.5 psia (100 kPa). Per gli altri esperimenti nessun dato."
  }
 }
