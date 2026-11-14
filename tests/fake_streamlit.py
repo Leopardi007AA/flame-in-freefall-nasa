@@ -18,6 +18,8 @@ def install(chat_question=None):
     st.columns = lambda spec, **k: [MagicMock() for _ in range(spec if isinstance(spec, int) else len(spec))]
     st.tabs = lambda labels: [MagicMock() for _ in labels]
     st.text_input = lambda *a, **k: ""
+    st.multiselect = lambda label, options=None, default=None, **k: list(default or [])
+    st.selectbox = lambda label, options=None, **k: (list(options)[0] if options else None)
     st.chat_input = lambda *a, **k: chat_question
     st.rerun = MagicMock(side_effect=SystemExit("rerun"))
     st.column_config = MagicMock()
