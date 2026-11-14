@@ -103,6 +103,8 @@ with col_ai:
                 st.markdown("Fonti: " + ", ".join(
                     f"[{c}]({urls[c]})" if urls.get(c, "") not in ("", "<NA>") else c
                     for c in msg["citations"]))
+            if msg.get("details"):
+                st.caption("Dettagli tecnici: " + " | ".join(msg["details"]))
             if msg.get("source") == "fallback":
                 st.caption("Risposta di riserva già salvata (AI non raggiungibile).")
 
@@ -120,7 +122,8 @@ with col_ai:
                 st.session_state["chat"].append({
                     "role": "assistant",
                     "text": "Non riesco a dare una risposta verificata a questa domanda. "
-                            "Riprova con una formulazione diversa."})
+                            "Riprova con una formulazione diversa.",
+                    "details": result["problems"]})
             else:
                 actions = []
                 if reply.gravity:

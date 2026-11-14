@@ -118,7 +118,7 @@ def answer_question(question: str, df, scenario: dict, api_key: str, model: str 
             if reply:
                 return {"source": "ai", "reply": reply, "problems": []}
         except Exception as e:  # rete, quota, chiave errata...
-            problems = [f"chiamata AI non riuscita ({type(e).__name__})"]
+            problems = [f"chiamata AI non riuscita ({type(e).__name__}: {str(e)[:200]})"]
     else:
         problems = ["nessuna chiave API configurata"]
     fb = fallback_answer(question, df, scenario)
