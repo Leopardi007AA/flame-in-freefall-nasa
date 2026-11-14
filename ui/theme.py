@@ -139,7 +139,84 @@ div[data-baseweb="popover"] li:hover {
     transition: transform .3s ease;
 }
 [data-testid="stVerticalBlockBorderWrapper"]:hover {
-    transform: translateY(-4px);
+    transform: translateY(-4px);}
+    
+/* ---------- 4. COMPONENTI ---------- */
+.card-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(255,255,255,.92);
+    margin-bottom: 10px;
+}
+.card-body {
+    font-family: Inter, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgba(255,255,255,.72);
+}
+
+.stat-tile { padding: 18px 20px; }
+.stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: rgba(255,255,255,.72);
+}
+.stat-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 6px 0;
+    color: rgba(255,255,255,.92);
+}
+.stat-note {
+    font-family: Inter, sans-serif;
+    font-size: 13px;
+    color: rgba(255,255,255,.72);
+}
+.tone-warm .stat-value  { color: #ff8a4c; }
+.tone-cool .stat-value  { color: #5ce1e6; }
+.tone-alert .stat-value { color: #ff6b6b; }
+.tone-alert { border-color: rgba(255,107,107,.6); }
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    border: 1px solid;
+    white-space: nowrap;
+}
+.badge-real {
+    color: #5ce1e6;
+    background: rgba(92,225,230,.12);
+    border-color: rgba(92,225,230,.55);
+}
+.badge-model {
+    color: #b9a9ff;
+    background: rgba(185,169,255,.12);
+    border-color: rgba(185,169,255,.55);
+    border-style: dashed;
+}
+.badge-illustrative {
+    color: #ff8a4c;
+    background: rgba(255,138,76,.12);
+    border-color: rgba(255,138,76,.55);
+    border-style: dotted;
+}
+.badge-nodata {
+    color: #a8b0c4;
+    background: rgba(255,255,255,.05);
+    border-color: rgba(168,176,196,.5);
 }
 
 /* ---------- 3.9 ACCESSIBILITA' ---------- */
