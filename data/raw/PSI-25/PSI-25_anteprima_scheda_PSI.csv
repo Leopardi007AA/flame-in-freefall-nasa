@@ -1,0 +1,6 @@
+PI,Test #,Date,GMT,Sample #,Fuel Sample Material,Flow restrictor,Fan display,Air display,Radiometer gain (1000 250 50 10),Total Frames Shot,Calibrated initial O2 % by vol,Calibrated final O2 % by vol,Initial CO2 % by vol,Final CO2 % by vol,Initial CO (ppm),Final CO (ppm)
+Bhattacharjee,B1,2/19/2014,50,147,100 micron PMMA film 2 cm wide,2,62,5,50,57,22.2,22.2,0.44,0.44,0,6
+Bhattacharjee,B2,2/19/2014,50,155,200 micron PMMA film 2 cm wide,2,62,5,50,none,22.2,1.6,0.44,,6,
+Bhattacharjee,B3,2/19/2014,50,148,100 micron film 2 cm wide,2,47,2,50,253,22.2,21.8,0.43,0.49,12,19
+Bhattacharjee,B4,2/19/2014,50,159,300 micron PMMA film 2 cm wide,2,61,5,50,137,22.2,22.2,0.44,0.51,-1,10
+Bhattacharjee,B5,2/19/2014,50,156,200 micron 2 cm wide,2,59,5,50,206,22.2,21.9,0.43,0.43,0,12

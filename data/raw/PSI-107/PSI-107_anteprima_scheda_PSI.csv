@@ -1,0 +1,6 @@
+GMT date,GMT ignition,GMT Flame Off,Fuel,Nozzle (mm),Fuel Rate (sccm),Fuel Rate (mg/s),HC Fuel Rate (mg/s),Air Rate (cm/s)
+45,14:37:08,14:48:03,Ethylene,1.6002,103.8,1.971,1.971,36.39
+45,14:37:08,14:48:03,Ethylene,1.6002,103.8,1.971,1.971,36.39
+45,14:50:07,14:52:11,Ethylene,1.6002,51,0.968,0.968,40.15
+45,14:50:07,14:52:11,Ethylene,1.6002,51.6,0.98,0.98,40.15
+45,15:35:44,15:37:00,Ethylene,1.6002,138,2.62,2.62,57.08

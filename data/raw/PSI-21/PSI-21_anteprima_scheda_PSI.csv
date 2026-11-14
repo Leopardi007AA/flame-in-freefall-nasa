@@ -1,0 +1,6 @@
+Test Type,Test Day,Fuel MFC,N2 MFC,Fuel Bottle,Fuel conc. Range,Flames ignited,Notes
+Methane based test,17319,0.1,0.1,40% CH4,30%-40%,10,"""Test Day - includes the year as the first two digits followed by the 3-digit day of the year (where any late-hour transition to the next day is neglected). MFC - identifies the maximum flow rate of the specified ACME Mass Flow Controller (MFC) in slpm on a nitrogen basis. Fuel conc. - (as diluted with nitrogen on a volume basis) was varied between tests and sometimes during tests where the listing here accounts for both. However"
+Methane based test,17324,0.1,0.1,40% CH5,30%-40%,5,
+Methane based test,17342,0.1,0.1,40% CH6,40%,8,
+Methane based test,17356,0.1,0.1,40% CH7,30%-40%,3,
+Methane based test,18003,0.1,0.1,40% CH8,25%-40%,9,
