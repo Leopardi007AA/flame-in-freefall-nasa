@@ -149,3 +149,16 @@ class TestFallbackAndLimiter(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestNtrsTools(unittest.TestCase):
+    def test_candidate_sentences(self):
+        from src.ntrs_tools import candidate_sentences, find_doi
+        text = ("The ambient oxygen concentration varied from 30% by volume to as low as 12%. "
+                "Tests were run at 0.7 atm and 1 atm. The camera was mounted on the left wall of the rig. "
+                "The average forced air speed was 20 cm/s.")
+        got = candidate_sentences(text)
+        self.assertEqual(len(got), 3)
+        self.assertFalse(any("camera" in g for g in got))
+        self.assertEqual(find_doi({"identifier": [{"type": "DOI", "value": "10.1000/x1"}]}), "10.1000/x1")
+        self.assertEqual(find_doi({}), "")
