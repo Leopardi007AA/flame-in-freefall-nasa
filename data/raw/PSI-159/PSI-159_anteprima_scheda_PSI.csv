@@ -1,0 +1,6 @@
+Flame Type,Day,Fuel,Test,Cool flame?,XO2 before test,XO2 after test,approx p (bar),Xf,mHC (mg/s),TFP,Tad (K),Zst,Hot ignition,burn time (sec),Self-ext or flow term,Peak burner T (C ),Comments
+Normal,1,ethane,21088A1,,0.3939,0.389822946,0.9443956,1,2,No,2719.323211,0.102651783,Yes,50,SE,290.617198,
+Normal,1,ethane,21088 B1,,0.389822946,0.386321188,0.9443956,1,2,Yes,2713.594987,0.101747543,Yes,43,SE,276.009368,
+Normal,1,ethane,21088 C1,,0.386321188,0.382905163,0.9443956,1,2,Yes,2708.596221,0.100968644,Yes,42,SE,266.374008,hit burner T limit
+Normal,1,ethane,21088 D1,,0.382905163,0.380426741,0.9443956,1,1,Yes,2703.647801,0.100206801,Yes,61,FT,459.195642,FC=flow cut
+Normal,1,ethane,21088 F1,,0.380426741,0.379858042,0.9443956,1,0.5,Yes,2700.011998,0.099652813,Yes,28,FT,532.162657,Lowest flow rate for ignition
