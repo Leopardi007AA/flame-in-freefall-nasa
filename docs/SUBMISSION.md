@@ -12,14 +12,14 @@ A dashboard that ranks NASA microgravity combustion experiments for a chosen sce
 - **Flame Lab:** an illustrative animated flame (not a physical simulation) that reacts to gravity, oxygen, pressure and airflow.
 - **Experiment ranking:** a transparent relevance score (our own model, with declared weights) for each NASA PSI investigation in the table.
 - **AI Copilot (Google Gemini):** answers in natural language and can drive the dashboard ("Show me the Moon with 26.5% oxygen"). The AI proposes, the code decides: record ids and every number in an answer are checked against the cited records; rejected answers are retried and then replaced by pre-validated fallback answers.
-- **Gap analysis:** shows what is *not* known. In the current table no experiment declares a gravity between 0 g and 1 g, and most oxygen, pressure and airflow values are missing from the sources we could verify.
+- **Gap analysis:** shows what is *not* known. In the current table no experiment declares a gravity between 0 g and 1 g, and oxygen, pressure and airflow values are declared for only part of the 19 investigations (the rest are left empty, never estimated).
 - **Real data tab:** shows original NASA tables only when they are real; sample files are never presented as data.
 
 ## Why it matters
 Fire safety for Moon and Mars habitats depends on how flames behave at 0.16 g and 0.38 g, a regime that existing experiments barely cover. The dashboard makes that gap visible instead of hiding it.
 
 ## How we used NASA data
-NASA Physical Sciences Informatics (https://psi.nasa.gov/) investigation pages and NASA Technical Reports Server (https://ntrs.nasa.gov/) papers. Each row of `data/investigations.csv` records its source; an empty cell means unknown (never zero or an estimate). Values taken from papers are marked "to verify" in the notes.
+NASA Physical Sciences Informatics (https://psi.nasa.gov/) investigation pages and NASA Technical Reports Server (https://ntrs.nasa.gov/) papers. Each row of `data/investigations.csv` records its source; an empty cell means unknown (never zero or an estimate). DOIs, platforms and test values come from the official PSI investigation pages and from NTRS papers; the exact source sentence is quoted in the notes column.
 
 ## AI use disclosure
 - Gemini (Google, `google-genai` API) powers the in-app Copilot; its output is validated by code before being shown.
