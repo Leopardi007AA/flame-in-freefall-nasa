@@ -1,0 +1,6 @@
+Sample Type,SAME Test #,Description,Date,Inlet velocity (cm/s),Rt/R0,Duration (sec),Primary aging time (sec),Primary mixing time (sec),Net aging time (sec)
+Kapton,51,B.L. new formula,21-Jul,8.1,1.38,60,11,8,38
+Kapton,51a,B.L. new formula,22-Jul,8.1,1.38,60,,,261
+Kapton,61,Baseline Aging,2-Aug,8.1,1.38,60,11,8,38
+Kapton,61a,aged,2-Aug,8.1,1.38,,,,807
+Kapton,62,High Temp aging,2-Aug,8.1,1.48,60,11,8,39
