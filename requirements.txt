@@ -1,9 +1,8 @@
-# TODO(A): da un ambiente che funziona lancia `pip freeze` e fissa le versioni esatte
-# (nome==versione) di queste librerie, poi comunica a C la versione di Streamlit.
-# I limiti inferiori sotto sono provvisori.
-streamlit>=1.40
-pandas>=2.2
-plotly>=5.24
-pydantic>=2.7
-google-genai>=1.0
-requests>=2.32
+# Versioni fissate dall'ambiente che funziona (pip freeze del 11 novembre 2026).
+# Non aggiornarle prima della fine del concorso.
+streamlit==1.67.0
+pandas==3.1.1
+plotly==7.1.0
+pydantic==2.14.3
+google-genai==3.0.0
+requests==2.34.2
