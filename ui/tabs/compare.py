@@ -1,8 +1,3 @@
-"""ui/tabs/compare.py - scheda Confronto: fino a 3 esperimenti affiancati.
-
-Interfaccia concordata con il ruolo A: render(df, scenario, highlight_ids).
-Regola n. 1: una cella senza dato mostra «—» con l'etichetta NESSUN DATO, mai 0.
-"""
 import html
 
 import pandas as pd
@@ -10,120 +5,224 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from ui.components import badge
+from ui.mock_data import show_mock_banner
 from ui.plotly_theme import style_fig
 
-MAX_SELECTED = 3
-HILITE = "background:rgba(255,138,76,.14);"
+# Nome della chiave dell'ossigeno dentro "scenario".
+# DA CONFERMARE CON A: se lui la chiama in un altro modo, cambia solo questa riga.
+CHIAVE_O2 = "o2"
 
-# (etichetta, colonna testo | (colonna min, colonna max), unità se numerico)
-ROWS = [
-    ("Stato del combustibile", "stato_combustibile", None),
-    ("Combustibili", "combustibili", None),
-    ("Ossigeno", ("o2_min", "o2_max"), "%"),
-    ("Pressione", ("pressione_min_psia", "pressione_max_psia"), "psia"),
-    ("Flusso d'aria", ("flusso_min_cm_s", "flusso_max_cm_s"), "cm/s"),
-    ("Sensori", "sensori", None),
-    ("Aree di sicurezza", "area_sicurezza", None),
-    ("Dati grezzi", "dati_grezzi", None),
-]
+NESSUN_DATO = "— " + badge("NESSUN DATO", "nodata")
+
+CSS = """
+<style>
+.cmp-wrap { overflow-x: auto; }
+.cmp-table { width: 100%; border-collapse: collapse; }
+.cmp-table th, .cmp-table td {
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid rgba(255,255,255,.14);
+    vertical-align: top;
+    color: rgba(255,255,255,.92);
+}
+.cmp-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: rgba(255,255,255,.72);
+}
+.cmp-table tr.diff td, .cmp-table tr.diff th {
+    background: rgba(255,138,76,.14);
+}
+</style>
+"""
 
 
-def fmt_range(lo, hi):
-    """Testo di un intervallo, oppure None se mancano entrambi i valori."""
-    lo_ok, hi_ok = not pd.isna(lo), not pd.isna(hi)
-    if not lo_ok and not hi_ok:
+# ---------- piccole funzioni di aiuto ----------
+
+def manca(valore) -> bool:
+    """Vero se la cella è vuota. Lo zero NON è vuoto: è un dato vero."""
+    return pd.isna(valore) or str(valore).strip() == ""
+
+
+def numero(x) -> str:
+    """26.0 diventa '26', 26.5 resta '26.5'."""
+    return f"{float(x):g}"
+
+
+def testo(valore, elenco=False):
+    """Restituisce il testo della cella, oppure None se manca."""
+    if manca(valore):
         return None
-    if lo_ok and hi_ok:
-        return f"{lo:g}" if lo == hi else f"{lo:g}–{hi:g}"
-    return f"≥ {lo:g}" if lo_ok else f"≤ {hi:g}"
+    t = str(valore).strip()
+    if elenco:
+        t = ", ".join(parte.strip() for parte in t.split("|"))
+    return t
 
 
-def fmt_text(value):
-    """Testo di una cella, oppure None se vuota."""
-    if value is None or pd.isna(value) or str(value).strip() == "":
+def intervallo(minimo, massimo, unita):
+    """Restituisce '21–30 %', '21 %', 'min 21 %'... oppure None se mancano entrambi."""
+    if manca(minimo) and manca(massimo):
         return None
-    return str(value).replace("|", ", ")
+    if manca(minimo):
+        return f"max {numero(massimo)} {unita}"
+    if manca(massimo):
+        return f"min {numero(minimo)} {unita}"
+    if float(minimo) == float(massimo):
+        return f"{numero(minimo)} {unita}"
+    return f"{numero(minimo)}–{numero(massimo)} {unita}"
 
 
-def build_rows(sel: pd.DataFrame):
-    """Una riga per attributo: (etichetta, unità, [valori o None], differisce?)."""
-    out = []
-    for label, col, unit in ROWS:
-        if isinstance(col, tuple):
-            vals = [fmt_range(r[col[0]], r[col[1]]) for _, r in sel.iterrows()]
-        else:
-            vals = [fmt_text(r[col]) for _, r in sel.iterrows()]
-        out.append((label, unit, vals, len(set(vals)) > 1))
-    return out
-
-
-def _cell(value, unit):
-    if value is None:
-        return "— " + badge("NESSUN DATO", "nodata")
-    if unit:
-        return f"{html.escape(value)} {unit} " + badge("REALE", "real")
-    return html.escape(value)
-
-
-def table_html(sel: pd.DataFrame) -> str:
-    th = "".join(f'<th style="text-align:left;padding:8px 10px;">{html.escape(str(n))}</th>'
-                 for n in sel["nome"])
-    body = []
-    for label, unit, vals, differs in build_rows(sel):
-        style = HILITE if differs else ""
-        tds = "".join(f'<td style="padding:8px 10px;vertical-align:top;">{_cell(v, unit)}</td>'
-                      for v in vals)
-        body.append(f'<tr style="{style}"><td class="mono-label" style="padding:8px 10px;">'
-                    f'{html.escape(label)}</td>{tds}</tr>')
-    return ('<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">'
-            f'<thead><tr><th></th>{th}</tr></thead><tbody>{"".join(body)}</tbody></table></div>')
-
-
-def o2_figure(sel: pd.DataFrame, o2_scenario: float):
-    """Barre orizzontali degli intervalli di ossigeno + linea dello scenario. None se nessun dato."""
-    have = sel.dropna(subset=["o2_min", "o2_max"])
-    if have.empty:
+def ossigeno_scenario(scenario):
+    """Legge l'ossigeno dello scenario. Restituisce None se non c'è."""
+    try:
+        return float((scenario or {}).get(CHIAVE_O2))
+    except (TypeError, ValueError):
         return None
+
+
+def attributi(riga) -> dict:
+    """Le righe della tabella per UN esperimento."""
+    return {
+        "Stato del combustibile": testo(riga["stato_combustibile"]),
+        "Combustibili": testo(riga["combustibili"], elenco=True),
+        "Ossigeno": intervallo(riga["o2_min"], riga["o2_max"], "%"),
+        "Pressione": intervallo(riga["pressione_min_psia"], riga["pressione_max_psia"], "psia"),
+        "Flusso": intervallo(riga["flusso_min_cm_s"], riga["flusso_max_cm_s"], "cm/s"),
+        "Sensori": testo(riga["sensori"], elenco=True),
+        "Area di sicurezza": testo(riga["area_sicurezza"], elenco=True),
+        "Dati grezzi": testo(riga["dati_grezzi"]),
+    }
+
+
+def cella(valore) -> str:
+    if valore is None:
+        return NESSUN_DATO
+    return html.escape(valore)
+
+
+# ---------- le tre parti della scheda ----------
+
+def tabella(scelti: pd.DataFrame) -> None:
+    colonne = [attributi(riga) for _, riga in scelti.iterrows()]
+
+    intestazione = '<tr><th scope="col">Attributo</th>'
+    for nome in scelti["nome"]:
+        intestazione += f'<th scope="col">{html.escape(str(nome))}</th>'
+    intestazione += "</tr>"
+
+    righe = ""
+    for etichetta in colonne[0]:
+        valori = [c[etichetta] for c in colonne]
+        classe = ' class="diff"' if len(set(valori)) > 1 else ""
+        righe += f'<tr{classe}><th scope="row">{etichetta}</th>'
+        righe += "".join(f"<td>{cella(v)}</td>" for v in valori)
+        righe += "</tr>"
+
+    st.markdown(
+        f'<div class="cmp-wrap"><table class="cmp-table">{intestazione}{righe}</table></div>',
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        '<span class="mono-label">Sfondo arancio = gli esperimenti differiscono su questa riga</span>',
+        unsafe_allow_html=True,
+    )
+
+
+def grafico_ossigeno(scelti: pd.DataFrame, scenario: dict) -> None:
     fig = go.Figure()
-    for _, r in have.iterrows():
-        fig.add_trace(go.Bar(y=[r["nome"]], x=[max(r["o2_max"] - r["o2_min"], 0.3)], base=[r["o2_min"]],
-                             orientation="h", name=str(r["id"]),
-                             hovertemplate=f"{r['o2_min']:g}–{r['o2_max']:g} %<extra>{r['id']}</extra>"))
-    fig.add_vline(x=o2_scenario, line_dash="dash", line_color="#ff7a3d",
-                  annotation_text=f"Scenario {o2_scenario:g}%", annotation_font_color="#ff7a3d")
-    fig.update_xaxes(title="Ossigeno (% in volume)", range=[0, 100])
-    fig.update_layout(showlegend=False, barmode="overlay")
-    return style_fig(fig, height=120 + 60 * len(have))
+    esclusi = 0
 
+    for _, riga in scelti.iterrows():
+        if manca(riga["o2_min"]) or manca(riga["o2_max"]):
+            esclusi += 1
+            continue
+        minimo = float(riga["o2_min"])
+        massimo = float(riga["o2_max"])
+        fig.add_trace(
+            go.Bar(
+                y=[riga["nome"]],
+                x=[max(massimo - minimo, 0.3)],  # almeno 0.3 per vedere un valore singolo
+                base=[minimo],
+                orientation="h",
+                name=str(riga["nome"]),
+                hovertext=[intervallo(minimo, massimo, "%")],
+                hoverinfo="text",
+            )
+        )
+
+    if not fig.data:
+        st.markdown(
+            "Nessun esperimento scelto ha i valori di ossigeno. " + badge("NESSUN DATO", "nodata"),
+            unsafe_allow_html=True,
+        )
+        return
+
+    o2 = ossigeno_scenario(scenario)
+    if o2 is not None:
+        fig.add_vline(
+            x=o2,
+            line_dash="dash",
+            line_color="#ffb347",
+            annotation_text=f"Scenario {numero(o2)}%",
+            annotation_position="top right",
+            annotation_font_color="#ffb347",
+        )
+
+    style_fig(fig, height=140 + 60 * len(fig.data))
+    fig.update_layout(
+        title="Intervalli di ossigeno (% in volume)",
+        barmode="overlay",
+        showlegend=False,
+    )
+    fig.update_yaxes(autorange="reversed")
+    st.plotly_chart(fig, config={"displayModeBar": False})
+
+    if esclusi:
+        st.markdown(
+            f'<span class="mono-label">Esperimenti senza dati di ossigeno (non mostrati nel grafico): {esclusi}</span>',
+            unsafe_allow_html=True,
+        )
+
+
+def bottoni_psi(scelti: pd.DataFrame) -> None:
+    colonne = st.columns(len(scelti))
+    for col, (_, riga) in zip(colonne, scelti.iterrows()):
+        with col:
+            if manca(riga["url_psi"]):
+                st.markdown(
+                    f'{html.escape(str(riga["nome"]))}: scheda PSI non disponibile '
+                    + badge("NESSUN DATO", "nodata"),
+                    unsafe_allow_html=True,
+                )
+            else:
+                st.link_button(f'Apri la scheda PSI · {riga["nome"]}', riga["url_psi"])
+
+
+# ---------- la funzione che chiama A ----------
 
 def render(df: pd.DataFrame, scenario: dict, highlight_ids: list) -> None:
-    ids = df["id"].astype(str).tolist()
-    names = dict(zip(ids, df["nome"].astype(str)))
-    default = [i for i in (highlight_ids or []) if i in ids][:MAX_SELECTED]
-    chosen = list(st.multiselect(
-        f"Scegli fino a {MAX_SELECTED} esperimenti", ids, default=default,
-        format_func=lambda i: f"{i} · {names[i]}", max_selections=MAX_SELECTED,
-        key="cmp_sel_" + "_".join(default)))
-    if not chosen:
-        st.info("Seleziona almeno un esperimento per vedere il confronto.")
+    st.markdown(CSS, unsafe_allow_html=True)
+    show_mock_banner()
+
+    nomi = dict(zip(df["id"], df["nome"]))
+    preselezionati = [i for i in (highlight_ids or []) if i in nomi][:3]
+
+    selezione = st.multiselect(
+        "Scegli fino a 3 esperimenti da confrontare",
+        options=df["id"].tolist(),
+        default=preselezionati,
+        max_selections=3,
+        format_func=lambda i: str(nomi[i]),
+    )
+
+    if not selezione:
+        st.write("Scegli almeno un esperimento per vedere il confronto.")
         return
-    sel = df.set_index(df["id"].astype(str), drop=False).loc[chosen].reset_index(drop=True)
-    st.markdown(table_html(sel), unsafe_allow_html=True)
-    st.caption("Le righe su sfondo arancio sono quelle in cui gli esperimenti differiscono. "
-               "«—» = nessun dato nelle fonti (non è zero).")
-    fig = o2_figure(sel, float(scenario["o2"]))
-    if fig is None:
-        st.info("Nessuno degli esperimenti scelti ha un intervallo di ossigeno nei dati.")
-    else:
-        st.plotly_chart(fig, config={"displayModeBar": False})
-        missing = sel[sel[["o2_min", "o2_max"]].isna().any(axis=1)]["nome"].tolist()
-        if missing:
-            st.caption("Senza dati di ossigeno (non disegnati): " + ", ".join(missing))
-    cols = st.columns(len(chosen))
-    for col, (_, r) in zip(cols, sel.iterrows()):
-        with col:
-            url = fmt_text(r["url_psi"])
-            if url and url.startswith("https://"):
-                st.link_button(f"Apri la scheda PSI · {r['id']}", url)
-            else:
-                st.caption(f"{r['id']}: scheda PSI non disponibile")
+
+    scelti = df.set_index("id").loc[selezione].reset_index()
+
+    tabella(scelti)
+    grafico_ossigeno(scelti, scenario)
+    bottoni_psi(scelti)

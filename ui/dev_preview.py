@@ -1,36 +1,29 @@
-"""ui/dev_preview.py - pagina di prova per lavorare alle schede con dati finti.
-Uso: streamlit run ui/dev_preview.py
-Qui i dati sono SEMPRE finti (MOCK): il banner e' ben visibile. L'app vera usa i dati di data/."""
-import pathlib
 import sys
-
+import pathlib
 sys.path.append(str(pathlib.Path(__file__).resolve().parent.parent))
 
-import streamlit as st  # noqa: E402
+import streamlit as st
+from ui.theme import apply_theme
+from ui import mock_data
+from ui.mock_data import get_mock_data, get_mock_tables
+from ui.tabs import compare, gaps, real_data
 
-from ui.mock_data import get_mock_data, show_mock_banner  # noqa: E402
-from ui.tabs import compare, gaps, real_data  # noqa: E402
-from ui.theme import apply_theme  # noqa: E402
-
-st.set_page_config(page_title="Anteprima interfaccia", layout="wide")
+mock_data.IS_MOCK = True   # qui i dati sono finti: banner acceso
 apply_theme()
+
 st.title("Anteprima interfaccia")
 
 df = get_mock_data()
-scenario = {
-    "gravity": st.selectbox("Gravità", ["earth", "mars", "moon", "iss"], index=1),
-    "o2": st.slider("Ossigeno %", 21.0, 85.0, 30.0, step=0.5),
-    "pressure": 10.2,
-    "flow": 5.0,
-}
+scenario = {"gravita": "microgravita", "o2": 21}
+highlight_ids = ["MOCK-1", "MOCK-2", "MOCK-4"]
 
-tab_confronto, tab_lacune, tab_dati = st.tabs(["Confronto", "Lacune", "Dati reali"])
+tab_confronto, tab_dati, tab_lacune = st.tabs(["Confronto", "Dati reali", "Lacune"])
+
 with tab_confronto:
-    show_mock_banner()
-    compare.render(df, scenario, [])
-with tab_lacune:
-    show_mock_banner()
-    gaps.render(df, scenario, [])
+    compare.render(df, scenario, highlight_ids)
+
 with tab_dati:
-    show_mock_banner()
-    real_data.render({})
+    real_data.render(get_mock_tables())
+
+with tab_lacune:
+    gaps.render(df, scenario, highlight_ids)
