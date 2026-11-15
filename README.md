@@ -59,7 +59,7 @@ The in-app Copilot uses Google's Gemini model (`google-genai` API); every answer
 in code (record ids and numbers must appear in the cited records). The code in this repository (app, tests,
 scripts, Flame Lab) was written with the assistance of Claude (Anthropic) and reviewed by the team. Data
 summaries may contain AI-generated or AI-summarised text and must be checked against the sources listed in
-`data/SOURCES.md`. The flame is rendered by CSS code, not by an image-generation model. The NASA Space Apps Challenge logo is shown in the top-right corner only to identify the event (`static/space_apps_logo_light.png`, light-on-dark variant of the official logo); no other NASA logo or
+`data/SOURCES.md`. The flame is rendered by CSS code, not by an image-generation model. No NASA logo or
 design element is used.
 
 External resources: Streamlit, pandas, plotly, pydantic, google-genai, requests (see `requirements.txt`);

@@ -30,7 +30,7 @@ Code: https://github.com/Leopardi007AA/flame-in-freefall-nasa
 ## Use of Super Intelligence (SI)
 - Google Gemini (`google-genai` API) powers the in-app Copilot; its output is validated by code before it is shown.
 - The code of this repository and parts of the data summaries were written with the assistance of an AI assistant (Claude, Anthropic) and reviewed by the team. Code and data files state this in `README.md` and `data/SOURCES.md` (column `verificato_da`).
-- The flame is drawn by CSS code, not by an image-generation model. No SI-generated images, video or audio are used. The only NASA-related mark is the official NASA Space Apps Challenge logo, shown in the top-right corner to identify the event; the project states that it is independent and not endorsed by NASA.
+- The flame is drawn by CSS code, not by an image-generation model. No SI-generated images, video or audio are used. No NASA logo or branding is used.
 - <TEAM: confirm that the idea of the project came from the team, not from SI, before submitting.>
 
 ## NASA Data

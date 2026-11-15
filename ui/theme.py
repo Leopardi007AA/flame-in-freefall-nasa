@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import streamlit as st
 
 CSS = """
@@ -244,48 +242,5 @@ div[data-baseweb="popover"] li:hover {
 """
 
 
-# NASA Space Apps Challenge logo, light-on-dark variant (transparent PNG).
-# It is served as a STATIC FILE (static/ + enableStaticServing in .streamlit/config.toml) instead of being
-# embedded in the page: a 25 KB base64 string inside st.markdown slows the rendering down enough to change
-# the (already timing-dependent) height of the chat input on phones.
-LOGO_FILE = Path(__file__).resolve().parent.parent / "static" / "space_apps_logo_light.png"
-LOGO_URL = "app/static/space_apps_logo_light.png"
-
-# The logo is drawn by CSS only, in the SAME markdown block as the theme, so it adds no element to the
-# page flow: it is taken out of the flow (position: absolute) and nothing else moves.
-# It sits in the empty band between the Streamlit header bar and the title, on the right edge of the
-# content. Streamlit makes the content block the reference of position: absolute, so right: 0 is the
-# content's right edge and top: -30px is just under the 60px header bar.
-# pointer-events: none -> it never blocks a click.
-LOGO_CSS = """
-#sa-logo {
-    position: absolute;
-    top: -30px;
-    right: 0;
-    width: 120px;
-    aspect-ratio: 360 / 141;
-    background: url("__URL__") center / contain no-repeat;
-    pointer-events: none;
-    user-select: none;
-    z-index: 1;
-}
-@media (max-width: 576px) {
-    #sa-logo { width: 84px; }
-}
-@media print { #sa-logo { display: none; } }
-"""
-
-
-def _logo_markup() -> str:
-    """CSS + an empty div carrying the logo. Empty string if the file is missing (the app never breaks)."""
-    if not LOGO_FILE.is_file():
-        return ""
-    return (
-        "<style>" + LOGO_CSS.replace("__URL__", LOGO_URL) + "</style>"
-        '<div id="sa-logo" role="img" aria-label="NASA Space Apps Challenge"></div>'
-    )
-
-
 def apply_theme() -> None:
-    # One single markdown block (theme + logo): no extra element in the page, so no layout shift.
-    st.markdown(CSS + _logo_markup(), unsafe_allow_html=True)
+    st.markdown(CSS, unsafe_allow_html=True)

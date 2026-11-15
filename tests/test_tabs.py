@@ -107,18 +107,5 @@ class TestMockBanner(unittest.TestCase):
         self.assertEqual(list(df.columns), mock_data.COLONNE)
 
 
-class TestLogo(unittest.TestCase):
-    """The Space Apps logo must stay a tiny, out-of-flow element (it must never move the page)."""
-
-    def test_logo_markup_is_small_and_out_of_flow(self):
-        from ui import theme
-        self.assertTrue(theme.LOGO_FILE.is_file())
-        markup = theme._logo_markup()
-        self.assertIn('id="sa-logo"', markup)
-        self.assertIn("position: absolute", markup)      # out of the page flow
-        self.assertIn("pointer-events: none", markup)    # never blocks a click
-        self.assertLess(len(markup), 2000)               # no embedded image in the page
-
-
 if __name__ == "__main__":
     unittest.main()

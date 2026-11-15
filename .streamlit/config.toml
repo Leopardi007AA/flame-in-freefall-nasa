@@ -4,7 +4,3 @@ primaryColor = "#ff7a3d"
 backgroundColor = "#070b1a"
 secondaryBackgroundColor = "#101830"
 textColor = "#f2f5ff"
-
-[server]
-# serves the files in static/ at /app/static/ (used for the Space Apps logo)
-enableStaticServing = true
