@@ -1,6 +1,6 @@
 """src/data_loader.py - loads and normalizes the experiments table.
 
-If data/investigations.csv (delivered by role B) does not exist yet, it uses the FAKE
+If data/investigations.csv does not exist, it uses the FAKE
 development data in dev/investigations_mock.csv: the fake rows have a name that starts with MOCK
 and the app shows a banner as long as there are any.
 """

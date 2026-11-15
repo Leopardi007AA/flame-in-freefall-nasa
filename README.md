@@ -33,18 +33,22 @@ python -m unittest discover -s tests -v
 
 The tests require neither Streamlit nor Gemini (they use a fake Streamlit). They do not check the visual appearance.
 
-## Structure and responsibilities
+## Structure
 
-| Folder / file | Role | Content |
-|---|---|---|
-| `app.py`, `src/`, `ui/flame_lab.py` | A | app shell, AI, scores, animated flame |
-| `ui/theme.py`, `ui/components.py`, `ui/plotly_theme.py`, `ui/tabs/` | C | theme, components, Compare / Gaps / Real data tabs |
-| `data/`, `scripts/fetch_ntrs.py` | B | `investigations.csv`, `papers.json`, `raw/`, `SOURCES.md` |
-| `dev/investigations_mock.csv` | A | **fake** development data, used only if `data/investigations.csv` is missing |
+| Folder / file | Content |
+|---|---|
+| `app.py` | the Streamlit app: sidebar, Flame Lab, Copilot, tiles, ranking and tabs |
+| `src/` | data loading (`data_loader.py`), relevance score (`scoring.py`), Copilot and its validation (`ai_engine.py`, `ai_validation.py`, `system_prompt.txt`, `demo_answers.json`), NTRS helpers (`ntrs_tools.py`) |
+| `ui/` | theme, components, Plotly theme, animated flame (`flame_lab.py`), Compare / Gaps / Real data tabs (`tabs/`) |
+| `data/` | `investigations.csv`, `papers.json`, `raw/` (previews of the PSI tables), `SOURCES.md`, `CREDITS.md` |
+| `scripts/` | `validate_csv.py`, `fetch_ntrs.py`, `verify_ntrs.py`, `check_gemini.py` |
+| `tests/` | unit and smoke tests |
+| `docs/` | demo script and submission sheet |
+| `dev/` | **fake** development data, used only if `data/investigations.csv` is missing |
 
-Contracts between the roles: CSV schema (columns frozen at v1, checked by
-`python scripts/validate_csv.py`), `rank(df, scenario)`, `compare.render(df, scenario, highlight_ids)`,
-`gaps.render(df, scenario, highlight_ids)`, `real_data.render(tables)`.
+Main interfaces: the CSV schema (columns frozen at v1, checked by `python scripts/validate_csv.py`),
+`rank(df, scenario)`, `compare.render(df, scenario, highlight_ids)`,
+`gaps.render(df, scenario, highlight_ids)` and `real_data.render(tables)`.
 
 ## Data rules
 
@@ -66,3 +70,7 @@ design element is used.
 
 External resources: Streamlit, pandas, plotly, pydantic, google-genai, requests (see `requirements.txt`);
 NASA Physical Sciences Informatics (psi.nasa.gov) and NASA NTRS (ntrs.nasa.gov) as data sources.
+
+## License
+
+Apache License 2.0, see [LICENSE](LICENSE). NASA data remain subject to the terms of the NASA sites they come from; sources and credits are in [`data/SOURCES.md`](data/SOURCES.md) and [`data/CREDITS.md`](data/CREDITS.md).

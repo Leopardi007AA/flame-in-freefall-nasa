@@ -1,36 +1,16 @@
-"""Flame in Freefall - app shell (role A).
+"""Flame in Freefall: app shell.
 
-Mounts: theme, Flame Lab, AI Copilot, tiles, ranking and the role C tabs.
-If C's modules do not exist yet (ui/theme.py, ui/components.py, ui/tabs/*) it uses
-the minimal versions in src/ui_fallbacks.py.
+Mounts the theme, Flame Lab, AI Copilot, tiles, ranking and the Compare / Gaps / Real data tabs.
 """
 import streamlit as st
 
 from src.ai_engine import DEFAULT_MODEL, RateLimiter, answer_question, get_api_key
 from src.data_loader import is_mock, load_investigations, load_papers
 from src.scoring import rank
+from ui.components import stat_tile
 from ui.flame_lab import GRAVITY, render as flame_lab
-
-try:
-    from ui.theme import apply_theme
-except ImportError:
-    from src.ui_fallbacks import apply_theme
-try:
-    from ui.components import stat_tile
-except ImportError:
-    from src.ui_fallbacks import stat_tile
-try:
-    from ui.tabs import compare
-except ImportError:
-    from src.ui_fallbacks import compare
-try:
-    from ui.tabs import gaps
-except ImportError:
-    from src.ui_fallbacks import gaps
-try:
-    from ui.tabs import real_data
-except ImportError:
-    from src.ui_fallbacks import real_data
+from ui.tabs import compare, gaps, real_data
+from ui.theme import apply_theme
 
 st.set_page_config(page_title="Flame in Freefall", page_icon=":fire:", layout="wide")
 apply_theme()
@@ -176,14 +156,14 @@ with st.expander("Why is it ranked first?"):
     top = ranked.iloc[0]
     st.write(f"**{top['nome']}** — " + " · ".join(top["why"]))
 
-# ---------------- role C tabs ----------------
+# ---------------- tabs ----------------
 tab_cmp, tab_gap, tab_real = st.tabs(["Compare", "Gaps", "Real data"])
 with tab_cmp:
     compare.render(df, scenario, st.session_state["highlight_ids"])
 with tab_gap:
     gaps.render(df, scenario, st.session_state["highlight_ids"])
 with tab_real:
-    real_data.render({})   # role B + C: tables from data/raw/ (to be connected)
+    real_data.render({})   # the tab reads data/raw/ on its own
 
 st.caption("Independent project for the NASA Space Apps Challenge, not affiliated with or endorsed "
            "by NASA. The flames are an illustrative rendering, not a physical simulation.")
