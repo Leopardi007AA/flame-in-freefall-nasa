@@ -12,7 +12,7 @@ Flame in Freefall is a dashboard of NASA microgravity combustion experiments for
 [<ADD LINK — public video ≤ 30 s with English subtitles, or ≤ 7 slides; no password>](https://docs.google.com/presentation/d/1iUPAxiVmiNx3HI-IpGE8ZAAgTozwuArUOD9Xil2ZWaY/edit?slide=id.h2458178d6528d7cb_0_368#slide=id.h2458178d6528d7cb_0_368)
 
 ## Link to Final Project
-Live app: https://flame-in-freefall-nasa-fzgfghjn5vfzmfhukvnt58.streamlit.app/
+Live app: [https://flame-in-freefall-nasa-fzgfghjn5vfzmfhukvnt58.streamlit.app/](https://flame-in-freefall-nasa-clean-fxsi2n57qbyr5txlrtqpnv.streamlit.app/)
 Code: https://github.com/Leopardi007AA/flame-in-freefall-nasa
 
 ## Detailed Project Description
