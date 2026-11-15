@@ -1,16 +1,16 @@
 # Flame in Freefall
 
-Dashboard per la sfida **Flame in Freefall** del NASA Space Apps Challenge 2026: riassume, ordina e
-spiega gli esperimenti NASA sulla combustione in microgravità, per la sicurezza antincendio su Luna e Marte.
+Dashboard for the **Flame in Freefall** challenge of the NASA Space Apps Challenge 2026: it summarizes, ranks and
+explains NASA combustion experiments in microgravity, for fire safety on the Moon and Mars.
 
-L'utente sceglie uno scenario (gravità, ossigeno, pressione, flusso d'aria); un **Copilota AI** comanda
-la dashboard, ma **non può inventare dati**: ogni risposta viene validata dal codice (id esistenti, numeri
-presenti nelle fonti citate) e dove i dati non esistono lo dichiara.
+The user picks a scenario (gravity, oxygen, pressure, airflow); an **AI Copilot** drives the dashboard, but
+**cannot invent data**: every answer is validated by the code (existing ids, numbers present in the cited
+sources) and where the data do not exist it says so.
 
-> Progetto indipendente, non affiliato né approvato dalla NASA. Le fiamme sono una resa illustrativa,
-> non una simulazione fisica.
+> Independent project, not affiliated with or endorsed by NASA. The flames are an illustrative rendering,
+> not a physical simulation.
 
-## Avvio
+## Getting started
 
 ```bash
 python -m venv .venv
@@ -19,47 +19,43 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-Chiave Gemini (solo per il Copilota): variabile d'ambiente `GEMINI_API_KEY`, oppure
-`.streamlit/secrets.toml` con `GEMINI_API_KEY = "..."`, oppure il campo nella sidebar.
-**Non committare mai la chiave** (`.streamlit/secrets.toml` è nel `.gitignore`).
+Gemini key (only for the Copilot): the `GEMINI_API_KEY` environment variable, or
+`.streamlit/secrets.toml` with `GEMINI_API_KEY = "..."`, or the field in the sidebar.
+**Never commit the key** (`.streamlit/secrets.toml` is in `.gitignore`).
 
-## Test
+## Tests
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-I test non richiedono Streamlit né Gemini (usano un Streamlit finto). Non verificano l'aspetto grafico.
+The tests require neither Streamlit nor Gemini (they use a fake Streamlit). They do not check the visual appearance.
 
-## Struttura e responsabilità
+## Structure and responsibilities
 
-| Cartella / file | Ruolo | Contenuto |
+| Folder / file | Role | Content |
 |---|---|---|
-| `app.py`, `src/`, `ui/flame_lab.py` | A | guscio dell'app, AI, punteggi, fiamma animata |
-| `ui/theme.py`, `ui/components.py`, `ui/plotly_theme.py`, `ui/tabs/` | C | tema, componenti, schede Confronto / Lacune / Dati reali |
+| `app.py`, `src/`, `ui/flame_lab.py` | A | app shell, AI, scores, animated flame |
+| `ui/theme.py`, `ui/components.py`, `ui/plotly_theme.py`, `ui/tabs/` | C | theme, components, Compare / Gaps / Real data tabs |
 | `data/`, `scripts/fetch_ntrs.py` | B | `investigations.csv`, `papers.json`, `raw/`, `SOURCES.md` |
-| `dev/investigations_mock.csv` | A | dati **finti** di sviluppo, usati solo se manca `data/investigations.csv` |
+| `dev/investigations_mock.csv` | A | **fake** development data, used only if `data/investigations.csv` is missing |
 
-Contratti tra i ruoli: schema del CSV (colonne congelate v1, controllate da
+Contracts between the roles: CSV schema (columns frozen at v1, checked by
 `python scripts/validate_csv.py`), `rank(df, scenario)`, `compare.render(df, scenario, highlight_ids)`,
 `gaps.render(df, scenario, highlight_ids)`, `real_data.render(tables)`.
 
-## Regole sui dati
+## Data rules
 
-- Cella vuota = dato sconosciuto. Mai 0, mai stime.
-- Ogni numero mostrato ha una fonte o un'etichetta di provenienza (REALE, MODELLO, ILLUSTRATIVO, NESSUN DATO).
-- Il punteggio di rilevanza è un **modello** con pesi dichiarati in `src/scoring.py`.
+- Empty cell = unknown data. Never 0, never estimates.
+- Every number shown has a source or a provenance label (REAL, MODEL, ILLUSTRATIVE, NO DATA).
+- The relevance score is a **model** with weights declared in `src/scoring.py`.
+- The column names and the categorical values of `data/investigations.csv` (for example `gravita`,
+  `microgravita`, `solido`, `prevenzione`) are the stable data contract used by the code, so they keep their
+  original Italian identifiers. The dashboard always shows English labels for them.
 
-## Uso dell'AI e risorse / AI use and resources
+## AI use and resources
 
-**Italiano.** Il Copilota dell'app usa il modello Gemini di Google (API `google-genai`); le sue risposte
-sono validate dal codice (id e numeri devono comparire nei record citati). Il codice di questo repository
-(app, test, script, Flame Lab) è stato scritto con l'assistenza di Claude (Anthropic) e rivisto dal team.
-Le descrizioni e le sintesi dei dati possono contenere testo generato o riassunto con AI e vanno
-verificate sulle fonti indicate in `data/SOURCES.md`. Le immagini della fiamma sono generate da codice
-(CSS), non da modelli di immagini. Nessun logo o elemento grafico NASA è utilizzato.
-
-**English.** The in-app Copilot uses Google's Gemini model (`google-genai` API); every answer is validated
+The in-app Copilot uses Google's Gemini model (`google-genai` API); every answer is validated
 in code (record ids and numbers must appear in the cited records). The code in this repository (app, tests,
 scripts, Flame Lab) was written with the assistance of Claude (Anthropic) and reviewed by the team. Data
 summaries may contain AI-generated or AI-summarised text and must be checked against the sources listed in

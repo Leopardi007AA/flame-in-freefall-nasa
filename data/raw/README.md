@@ -1,8 +1,8 @@
-# data/raw — tabelle originali NASA PSI
+# data/raw — original NASA PSI tables
 
-Ogni cartella `PSI-xx/` contiene `PSI-xx_anteprima_scheda_PSI.csv`: le **prime righe della tabella sperimentale mostrata sulla scheda PSI** dell'investigazione (testo copiato dal sito psi.nasa.gov il 14 novembre 2026, senza modifiche ai valori).
+Each `PSI-xx/` folder contains `PSI-xx_psi_page_preview.csv`: the **first rows of the experimental table shown on the PSI page** of the investigation (text copied from the psi.nasa.gov site on 14 November 2026, without any change to the values).
 
-- Sono **anteprime parziali**, non i dataset completi. Il dataset completo si scarica dalla scheda PSI (DOI nel file `data/investigations.csv`).
-- Nessun valore è stato aggiunto, corretto o stimato: solo trascritto dalla scheda.
-- Per sostituire un'anteprima con il download completo, mettere il file originale nella stessa cartella e cancellare l'anteprima.
-- I nomi dei file non devono contenere «sample» o «esempio»: la tab «Dati reali» li salta.
+- They are **partial previews**, not the full datasets. The full dataset can be downloaded from the PSI page (DOI in the file `data/investigations.csv`).
+- No value was added, corrected or estimated: they were only transcribed from the page.
+- To replace a preview with the full download, put the original file in the same folder and delete the preview.
+- File names must not contain “sample” or “example”: the “Real data” tab skips them.

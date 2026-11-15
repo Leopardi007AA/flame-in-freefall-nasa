@@ -2,7 +2,7 @@ import html
 
 import streamlit as st
 
-# icona e classe CSS per ogni tipo di etichetta di provenienza
+# icon and CSS class for each type of provenance label
 BADGES = {
     "real": ("◆", "badge-real"),
     "model": ("▲", "badge-model"),
@@ -14,9 +14,9 @@ TONES = ("neutral", "warm", "cool", "alert")
 
 
 def badge(text: str, kind: str = "real") -> str:
-    """Restituisce l'HTML di un'etichetta di provenienza.
-    kind: real (ciano, dato misurato) | model (viola, calcolato) |
-          illustrative (arancio) | nodata (grigio, nessun dato)"""
+    """Returns the HTML of a provenance label.
+    kind: real (cyan, measured data) | model (purple, computed) |
+          illustrative (orange) | nodata (grey, no data)"""
     icon, css_class = BADGES.get(kind, BADGES["nodata"])
     return (
         f'<span class="badge {css_class}">'
@@ -26,7 +26,7 @@ def badge(text: str, kind: str = "real") -> str:
 
 
 def glass_card(title: str, body_html: str, *, accent: str | None = None) -> None:
-    """Mostra una card di vetro con titolo e contenuto HTML."""
+    """Shows a glass card with a title and HTML content."""
     style = f' style="border-top: 3px solid {accent};"' if accent else ""
     st.markdown(
         f'<div class="glass"{style}>'
@@ -38,9 +38,9 @@ def glass_card(title: str, body_html: str, *, accent: str | None = None) -> None
 
 
 def stat_tile(label: str, value: str, note: str = "", tone: str = "neutral") -> None:
-    """Tile con etichetta, numero grande e nota.
+    """Tile with a label, a big number and a note.
     tone: neutral | warm | cool | alert.
-    La nota può contenere l'HTML di un badge."""
+    The note may contain the HTML of a badge."""
     if tone not in TONES:
         tone = "neutral"
     note_html = f'<div class="stat-note">{note}</div>' if note else ""

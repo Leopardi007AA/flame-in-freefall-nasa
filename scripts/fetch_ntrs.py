@@ -5,7 +5,7 @@ import requests
 
 URL = "https://ntrs.nasa.gov/api/citations/search"
 
-# Generiamo le query in modo dinamico per tutte le 20 investigazioni del nostro CSV
+# Queries for all the investigations in our CSV
 INVESTIGATIONS = [
     ("PSI-25", "BASS-II", "BASS-II microgravity solid fuel flammability"),
     ("PSI-26", "BASS", "BASS microgravity combustion cotton fiberglass"),
@@ -26,7 +26,7 @@ INVESTIGATIONS = [
     ("PSI-107", "SPICE", "SPICE coflow smoke point microgravity"),
     ("PSI-106", "SLICE", "Structure and Lift-Off in Combustion Experiment SLICE"),
     ("PSI-47", "DAFT", "Dust and Aerosol Measurement Feasibility Test P-Trak"),
-    ("PSI-39", "Fiamme fredde", "counterflow cool flames extinction oxygen stretch")
+    ("PSI-39", "Cool Flames", "counterflow cool flames extinction oxygen stretch")
 ]
 
 def search(q, size=5):
@@ -35,12 +35,12 @@ def search(q, size=5):
         r.raise_for_status()
         return r.json()
     except Exception as e:
-        print(f"Errore nella ricerca per '{q}': {e}")
+        print(f"Search error for '{q}': {e}")
         return {}
 
 out = []
 for psi_id, name, query_str in INVESTIGATIONS:
-    print(f"Cerco pubblicazioni per {psi_id} - {name}...")
+    print(f"Searching publications for {psi_id} - {name}...")
     data = search(query_str)
     for item in data.get("results", []):
         doi = None
@@ -65,4 +65,4 @@ for psi_id, name, query_str in INVESTIGATIONS:
 with open("data/papers.json", "w", encoding="utf-8") as f:
     json.dump(out, f, ensure_ascii=False, indent=2)
 
-print(f"Salvati {len(out)} record in data/papers.json con successo per tutte le investigazioni!")
+print(f"Saved {len(out)} records to data/papers.json for all the investigations.")

@@ -1,5 +1,5 @@
 {
- "Mostrami Marte con 30% di ossigeno e poco flusso": {
+ "Show me Mars with 30% oxygen and low airflow": {
   "gravity": "mars",
   "o2": 30.0,
   "flow": 2.0,
@@ -11,9 +11,9 @@
    "PSI-69",
    "PSI-25"
   ],
-  "answer": "Nessun dato a 0,38 g: tutti gli esperimenti della tabella sono in microgravità. Tra quelli con valori di ossigeno, i più vicini a questo scenario sono PSI-69 (FLEX, 12-30% di O2) e PSI-25 (BASS-II, 14-21%); li evidenzio."
+  "answer": "No data at 0.38 g: all the experiments in the table are in microgravity. Among those with oxygen values, the closest to this scenario are PSI-69 (FLEX, 12-30% O2) and PSI-25 (BASS-II, 14-21%); I'm highlighting them."
  },
- "Mostrami la Luna con 26,5% di ossigeno": {
+ "Show me the Moon with 26.5% oxygen": {
   "gravity": "moon",
   "o2": 26.5,
   "highlight_ids": [
@@ -22,15 +22,15 @@
   "citations": [
    "PSI-69"
   ],
-  "answer": "Nessun dato a 0,16 g: la tabella non contiene misure alla gravità lunare. Il record più vicino è PSI-69 (FLEX), che ha testato ossigeno tra 12 e 30% in microgravità, intervallo che comprende 26,5%."
+  "answer": "No data at 0.16 g: the table has no measurements at lunar gravity. The closest record is PSI-69 (FLEX), which tested oxygen between 12 and 30% in microgravity, a range that includes 26.5%."
  },
- "Cosa sappiamo della combustione a gravità lunare?": {
+ "What do we know about combustion at lunar gravity?": {
   "gravity": "moon",
   "highlight_ids": [],
   "citations": [],
-  "answer": "Nessun dato: nella tabella nessun esperimento dichiara gravità tra 0 e 1 g. Questa è una lacuna: i record coprono solo la microgravità."
+  "answer": "No data: in the table no experiment declares a gravity between 0 and 1 g. This is a gap: the records cover only microgravity."
  },
- "Quali esperimenti hanno dati sull'ossigeno?": {
+ "Which experiments have oxygen data?": {
   "highlight_ids": [
    "PSI-69",
    "PSI-25",
@@ -51,9 +51,9 @@
    "PSI-68",
    "PSI-159"
   ],
-  "answer": "Otto: PSI-69 (FLEX) tra 12 e 30% di O2, PSI-68 (FLEX-2) tra 17 e 30%, PSI-25 (BASS-II) tra 14 e 22.2%, PSI-159 tra 38 e 39.4%, PSI-98 (Saffire-I) tra 21.5 e 21.7%, PSI-99 (Saffire-II) tra 21.5 e 22.1%, PSI-10 tra 20.4 e 20.7% e PSI-39 (CFI) 21%. Per gli altri il valore non è disponibile nelle fonti consultate."
+  "answer": "Eight: PSI-69 (FLEX) between 12 and 30% O2, PSI-68 (FLEX-2) between 17 and 30%, PSI-25 (BASS-II) between 14 and 22.2%, PSI-159 between 38 and 39.4%, PSI-98 (Saffire-I) between 21.5 and 21.7%, PSI-99 (Saffire-II) between 21.5 and 22.1%, PSI-10 between 20.4 and 20.7% and PSI-39 (CFI) 21%. For the others the value is not available in the sources consulted."
  },
- "Quali esperimenti hanno un flusso d'aria noto?": {
+ "Which experiments have a known airflow?": {
   "highlight_ids": [
    "PSI-25",
    "PSI-98",
@@ -76,23 +76,23 @@
    "PSI-101",
    "PSI-68"
   ],
-  "answer": "PSI-25 (BASS-II) fino a 40 cm/s, PSI-98 e PSI-99 (Saffire) 20 cm/s, PSI-100 (Saffire-III) 30 cm/s, PSI-106 (SLICE) da 18 a 71 cm/s, PSI-107 (SPICE) da 36.39 a 57.08 cm/s, PSI-102 (SAME) da 5 a 10 cm/s, PSI-101 (SAME-R) 8.1 cm/s e PSI-68 (FLEX-2) da 0.1 a 5 cm/s. Per gli altri non c'è un valore dichiarato."
+  "answer": "PSI-25 (BASS-II) up to 40 cm/s, PSI-98 and PSI-99 (Saffire) 20 cm/s, PSI-100 (Saffire-III) 30 cm/s, PSI-106 (SLICE) from 18 to 71 cm/s, PSI-107 (SPICE) from 36.39 to 57.08 cm/s, PSI-102 (SAME) from 5 to 10 cm/s, PSI-101 (SAME-R) 8.1 cm/s and PSI-68 (FLEX-2) from 0.1 to 5 cm/s. For the others there is no declared value."
  },
- "Qual è la temperatura della fiamma a 0,16 g?": {
+ "What is the flame temperature at 0.16 g?": {
   "highlight_ids": [],
   "citations": [],
-  "answer": "Nessun dato: la tabella non contiene temperature della fiamma né misure a 0,16 g."
+  "answer": "No data: the table contains neither flame temperatures nor measurements at 0.16 g."
  },
- "Cosa ha studiato Saffire-I?": {
+ "What did Saffire-I study?": {
   "highlight_ids": [
    "PSI-98"
   ],
   "citations": [
    "PSI-98"
   ],
-  "answer": "PSI-98 (Spacecraft Fire Experiment-I) ha studiato quanto rapidamente cresce un grande incendio in bassa gravità e i limiti di infiammabilità, con flusso d'aria di 20 cm/s e ossigeno tra 21.5 e 21.7%."
+  "answer": "PSI-98 (Spacecraft Fire Experiment-I) studied how quickly a large fire grows in low gravity and the flammability limits, with an airflow of 20 cm/s and oxygen between 21.5 and 21.7%."
  },
- "Quali pressioni sono state testate?": {
+ "Which pressures were tested?": {
   "highlight_ids": [
    "PSI-69",
    "PSI-99",
@@ -109,6 +109,6 @@
    "PSI-68",
    "PSI-159"
   ],
-  "answer": "PSI-69 (FLEX) tra 10.3 e 14.7 psia, PSI-68 (FLEX-2) tra 7.35 e 14.7 psia (0.5-1.0 atm), PSI-99 (Saffire-II) 14.5 psia, PSI-159 circa 13.7 psia, PSI-39 (CFI) 14.7 psia e PSI-10 tra 14.87 e 14.96 psia. Per gli altri esperimenti nessun dato."
+  "answer": "PSI-69 (FLEX) between 10.3 and 14.7 psia, PSI-68 (FLEX-2) between 7.35 and 14.7 psia (0.5-1.0 atm), PSI-99 (Saffire-II) 14.5 psia, PSI-159 about 13.7 psia, PSI-39 (CFI) 14.7 psia and PSI-10 between 14.87 and 14.96 psia. For the other experiments, no data."
  }
 }

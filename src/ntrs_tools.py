@@ -1,6 +1,6 @@
-"""Funzioni per leggere i record NTRS e trovare le frasi con valori sperimentali.
+"""Functions to read NTRS records and find sentences with experimental values.
 
-Non scrivono mai nel CSV: producono solo candidati da controllare a mano.
+They never write to the CSV: they only produce candidates to be checked by hand.
 """
 import re
 
@@ -13,7 +13,7 @@ KEY_RE = re.compile(
 
 
 def find_doi(record: dict) -> str:
-    """Primo DOI trovato nel record (campo identifier, altrimenti ricerca nel testo)."""
+    """First DOI found in the record (identifier field, otherwise a search in the text)."""
     for ident in record.get("identifier", []) or []:
         if isinstance(ident, dict) and str(ident.get("type", "")).upper() == "DOI":
             return str(ident.get("value", "")).strip()
@@ -22,13 +22,13 @@ def find_doi(record: dict) -> str:
 
 
 def find_pdf_path(record: dict) -> str:
-    """Percorso del PDF nei download del record, o stringa vuota."""
+    """Path of the PDF in the record's downloads, or an empty string."""
     m = re.search(r"(/api/citations/\d+/downloads/[^\"'\s]+?\.pdf)", str(record.get("downloads", "")))
     return m.group(1) if m else ""
 
 
 def candidate_sentences(text: str, limit: int = 12) -> list[str]:
-    """Frasi che citano ossigeno, pressione o velocita' del flusso (da controllare a mano)."""
+    """Sentences that mention oxygen, pressure or flow velocity (to be checked by hand)."""
     flat = re.sub(r"\s+", " ", text)
     out = []
     for s in re.split(r"(?<=[.!?])\s+", flat):

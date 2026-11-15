@@ -1,6 +1,6 @@
-"""src/ui_fallbacks.py - versioni minime dei moduli del ruolo C (ui/theme.py, ui/components.py,
-ui/tabs/*). app.py le usa SOLO se i file veri di C non esistono ancora, cosi' l'app parte
-sempre. Quando C consegna, i suoi moduli prendono automaticamente il posto di questi.
+"""src/ui_fallbacks.py - minimal versions of the role C modules (ui/theme.py, ui/components.py,
+ui/tabs/*). app.py uses them ONLY if C's real files do not exist yet, so the app always
+starts. When C delivers, its modules automatically take the place of these.
 """
 from types import SimpleNamespace
 
@@ -29,10 +29,10 @@ def badge(text: str, kind: str = "real") -> str:
 
 def _placeholder(name: str):
     def render(*args, **kwargs):
-        st.info(f"Scheda «{name}»: in arrivo dal ruolo C.")
+        st.info(f"“{name}” tab: coming from role C.")
     return SimpleNamespace(render=render)
 
 
-compare = _placeholder("Confronto")
-gaps = _placeholder("Lacune")
-real_data = _placeholder("Dati reali")
+compare = _placeholder("Compare")
+gaps = _placeholder("Gaps")
+real_data = _placeholder("Real data")

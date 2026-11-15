@@ -1,10 +1,10 @@
-"""src/ai_engine.py - Copilota AI vincolato ("l'AI propone, il codice decide").
+"""src/ai_engine.py - constrained AI Copilot ("the AI proposes, the code decides").
 
-Flusso: domanda + scenario + record del CSV -> Gemini (solo JSON) -> validate_reply() ->
-se valida si applica alla dashboard; se no un nuovo tentativo; se ancora no, risposta di riserva.
+Flow: question + scenario + CSV records -> Gemini (JSON only) -> validate_reply() ->
+if valid it is applied to the dashboard; if not, a new attempt; if still not, a fallback answer.
 
-NOTA: la chiamata a Gemini (ask) NON e' stata provata con una chiave reale. Verifica
-nomi dei parametri e del modello con la documentazione di google-genai.
+NOTE: the Gemini call (ask) has NOT been tried with a real key. Check the parameter
+names and the model against the google-genai documentation.
 """
 import json
 import os
@@ -17,13 +17,13 @@ from src.ai_validation import AiReply, validate_reply
 ROOT = Path(__file__).resolve().parent.parent
 SYSTEM_PROMPT_PATH = ROOT / "src" / "system_prompt.txt"
 DEMO_ANSWERS_PATH = ROOT / "src" / "demo_answers.json"
-DEFAULT_MODEL = "gemini-3.8-flash"   # verifica con client.models.list() quali modelli hai
-FALLBACK_MODELS = ["gemini-3.7-flash", "gemini-3.5-flash-lite"]   # usati se il principale e' sovraccarico
-RETRY_WAITS = [1.5]                                           # secondi tra i tentativi su 503/429
+DEFAULT_MODEL = "gemini-3.8-flash"   # check with client.models.list() which models you have
+FALLBACK_MODELS = ["gemini-3.7-flash", "gemini-3.5-flash-lite"]   # used if the main one is overloaded
+RETRY_WAITS = [1.5]                                           # seconds between attempts on 503/429
 
 
 def get_api_key(sidebar_value: str = "") -> str:
-    """Ordine: st.secrets (online) -> variabile d'ambiente -> valore inserito nella sidebar."""
+    """Order: st.secrets (online) -> environment variable -> value typed in the sidebar."""
     try:
         import streamlit as st
         key = st.secrets.get("GEMINI_API_KEY", "")
@@ -40,7 +40,7 @@ def _records_json(df) -> str:
 
 
 def _generate(client, types, model, prompt, system):
-    """Una chiamata a Gemini; su 503/429 riprova, poi prova i modelli di riserva."""
+    """One call to Gemini; on 503/429 it retries, then tries the fallback models."""
     last = None
     for m in [model] + [x for x in FALLBACK_MODELS if x != model]:
         for wait in [0.0] + RETRY_WAITS:
@@ -61,32 +61,32 @@ def _generate(client, types, model, prompt, system):
 
 
 def ask(question: str, df, scenario: dict, api_key: str, model: str = DEFAULT_MODEL):
-    """Interroga Gemini. Restituisce (AiReply validata | None, lista di problemi)."""
-    from google import genai            # import tardivo: i test non richiedono la libreria
+    """Queries Gemini. Returns (validated AiReply | None, list of problems)."""
+    from google import genai            # late import: the tests do not require the library
     from google.genai import types
 
     system = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
-    client = genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=60000))  # 60 s per chiamata
-    prompt = (f"SCENARIO: {json.dumps(scenario)}\nRECORD:\n{_records_json(df)}\n"
-              f"DOMANDA: {question}")
+    client = genai.Client(api_key=api_key, http_options=types.HttpOptions(timeout=60000))  # 60 s per call
+    prompt = (f"SCENARIO: {json.dumps(scenario)}\nRECORDS:\n{_records_json(df)}\n"
+              f"QUESTION: {question}")
     problems: list[str] = []
     for _ in range(2):
         resp = _generate(client, types, model, prompt, system)
         reply, problems = validate_reply(AiReply.model_validate_json(resp.text), df, scenario)
         if reply:
             return reply, []
-        prompt += f"\nERRORI DA CORREGGERE: {problems}"
+        prompt += f"\nERRORS TO FIX: {problems}"
     return None, problems
 
 
-# ---------------- risposte di riserva ----------------
+# ---------------- fallback answers ----------------
 
 def normalize_question(q: str) -> str:
     return re.sub(r"[^a-z0-9 ]+", "", q.lower().replace("'", " ")).strip()
 
 
 def load_demo_answers(path: Path = DEMO_ANSWERS_PATH) -> dict:
-    """Chiave = domanda normalizzata, valore = AiReply come dizionario."""
+    """Key = normalized question, value = AiReply as a dictionary."""
     if not path.exists():
         return {}
     raw = json.loads(path.read_text(encoding="utf-8"))
@@ -94,7 +94,7 @@ def load_demo_answers(path: Path = DEMO_ANSWERS_PATH) -> dict:
 
 
 def fallback_answer(question: str, df, scenario: dict, answers: dict | None = None):
-    """Risposta di riserva gia' salvata, ri-validata sui dati correnti."""
+    """Already-saved fallback answer, re-validated on the current data."""
     answers = load_demo_answers() if answers is None else answers
     entry = answers.get(normalize_question(question))
     if not entry:
@@ -103,10 +103,10 @@ def fallback_answer(question: str, df, scenario: dict, answers: dict | None = No
     return reply
 
 
-# ---------------- limite d'uso ----------------
+# ---------------- usage limit ----------------
 
 class RateLimiter:
-    """Massimo `max_calls` richieste per sessione e `min_interval` secondi tra due richieste."""
+    """At most `max_calls` requests per session and `min_interval` seconds between two requests."""
 
     def __init__(self, max_calls: int = 20, min_interval: float = 3.0):
         self.max_calls, self.min_interval = max_calls, min_interval
@@ -115,26 +115,26 @@ class RateLimiter:
     def allow(self, now: float | None = None) -> tuple[bool, str]:
         now = time.monotonic() if now is None else now
         if self.calls >= self.max_calls:
-            return False, "Limite di richieste per questa sessione raggiunto."
+            return False, "Request limit for this session reached."
         if self.calls and now - self.last < self.min_interval:
-            return False, "Attendi qualche secondo prima della prossima domanda."
+            return False, "Please wait a few seconds before the next question."
         self.calls += 1
         self.last = now
         return True, ""
 
 
 def answer_question(question: str, df, scenario: dict, api_key: str, model: str = DEFAULT_MODEL) -> dict:
-    """Punto d'ingresso per l'app. Restituisce {"source": ai|fallback|error, "reply", "problems"}."""
+    """Entry point for the app. Returns {"source": ai|fallback|error, "reply", "problems"}."""
     problems: list[str] = []
     if api_key:
         try:
             reply, problems = ask(question, df, scenario, api_key, model)
             if reply:
                 return {"source": "ai", "reply": reply, "problems": []}
-        except Exception as e:  # rete, quota, chiave errata...
-            problems = [f"chiamata AI non riuscita ({type(e).__name__}: {str(e)[:200]})"]
+        except Exception as e:  # network, quota, wrong key...
+            problems = [f"AI call failed ({type(e).__name__}: {str(e)[:200]})"]
     else:
-        problems = ["nessuna chiave API configurata"]
+        problems = ["no API key configured"]
     fb = fallback_answer(question, df, scenario)
     if fb:
         return {"source": "fallback", "reply": fb, "problems": problems}
