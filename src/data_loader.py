@@ -1,8 +1,8 @@
-"""src/data_loader.py - carica e normalizza la tabella degli esperimenti.
+"""src/data_loader.py - loads and normalizes the experiments table.
 
-Se data/investigations.csv (consegnato dal ruolo B) non esiste ancora, usa i dati
-FINTI di sviluppo in dev/investigations_mock.csv: le righe finte hanno nome che inizia
-con MOCK e l'app mostra un banner finche' ce ne sono.
+If data/investigations.csv (delivered by role B) does not exist yet, it uses the FAKE
+development data in dev/investigations_mock.csv: the fake rows have a name that starts with MOCK
+and the app shows a banner as long as there are any.
 """
 from pathlib import Path
 import pandas as pd
@@ -16,7 +16,7 @@ NUM_COLS = ["o2_min", "o2_max", "pressione_min_psia", "pressione_max_psia",
 
 
 def load_investigations(path: Path | None = None) -> pd.DataFrame:
-    """Una riga per esperimento. Celle vuote = NaN (mai 0). `path` serve ai test."""
+    """One row per experiment. Empty cells = NaN (never 0). `path` is for the tests."""
     path = path or DATA_DIR / "investigations.csv"
     if not path.exists():
         path = MOCK_PATH
@@ -29,12 +29,12 @@ def load_investigations(path: Path | None = None) -> pd.DataFrame:
 
 
 def is_mock(df: pd.DataFrame) -> bool:
-    """Vero se nella tabella c'e' almeno una riga di prova (nome che inizia con MOCK)."""
+    """True if the table has at least one test row (name that starts with MOCK)."""
     return bool(df["nome"].fillna("").str.upper().str.startswith("MOCK").any())
 
 
 def load_papers() -> list[dict]:
-    """Articoli NTRS curati da B (data/papers.json). Lista vuota se il file non c'e' ancora."""
+    """NTRS papers curated by B (data/papers.json). Empty list if the file does not exist yet."""
     import json
     path = DATA_DIR / "papers.json"
     if not path.exists():

@@ -1,5 +1,5 @@
-"""Streamlit finto per il test di fumo: permette di eseguire app.py senza installare Streamlit.
-Controlla solo errori di battitura e di importazione, NON l'aspetto ne' il comportamento reale."""
+"""Fake Streamlit for the smoke test: it lets you run app.py without installing Streamlit.
+It only catches typos and import errors, NOT the appearance or the real behaviour."""
 import sys
 from types import ModuleType
 from unittest.mock import MagicMock
@@ -23,7 +23,7 @@ def install(chat_question=None):
     st.chat_input = lambda *a, **k: chat_question
     st.rerun = MagicMock(side_effect=SystemExit("rerun"))
     st.column_config = MagicMock()
-    # i moduli di C importano streamlit all'avvio: li si scarta, cosi' si reimportano col Streamlit finto
+    # C's modules import streamlit at startup: they are discarded so they are re-imported with the fake Streamlit
     for name in [k for k in sys.modules if k in ("ui.theme", "ui.components") or k.startswith("ui.tabs")]:
         del sys.modules[name]
     sys.modules["streamlit"] = st

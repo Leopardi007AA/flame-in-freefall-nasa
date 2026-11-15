@@ -1,10 +1,10 @@
-"""Controlla la chiave Gemini e il modello, senza avviare l'app.
+"""Checks the Gemini key and the model, without starting the app.
 
-Uso (dalla cartella del progetto, con l'ambiente attivo):
-    python scripts/check_gemini.py [nome-modello]
+Usage (from the project folder, with the environment active):
+    python scripts/check_gemini.py [model-name]
 
-La chiave si legge da GEMINI_API_KEY (variabile d'ambiente) oppure da .streamlit/secrets.toml.
-Lo script non stampa mai la chiave.
+The key is read from GEMINI_API_KEY (environment variable) or from .streamlit/secrets.toml.
+The script never prints the key.
 """
 import os
 import sys
@@ -31,16 +31,16 @@ def main() -> int:
 
     key = read_key()
     if not key:
-        print("ERRORE: nessuna chiave trovata (GEMINI_API_KEY o .streamlit/secrets.toml).")
+        print("ERROR: no key found (GEMINI_API_KEY or .streamlit/secrets.toml).")
         return 1
     model = sys.argv[1] if len(sys.argv) > 1 else DEFAULT_MODEL
-    print(f"Chiave trovata ({len(key)} caratteri). Modello in prova: {model}")
+    print(f"Key found ({len(key)} characters). Model under test: {model}")
 
     from google import genai
     from google.genai import types
     client = genai.Client(api_key=key)
 
-    print("\n1) Modelli disponibili con questa chiave:")
+    print("\n1) Models available with this key:")
     try:
         names = []
         for m in client.models.list():
@@ -50,30 +50,30 @@ def main() -> int:
         for n in names:
             print("  -", n)
     except Exception as e:
-        print(f"  ERRORE ({type(e).__name__}): {str(e)[:300]}")
+        print(f"  ERROR ({type(e).__name__}): {str(e)[:300]}")
 
-    print("\n2) Richiesta semplice:")
+    print("\n2) Simple request:")
     try:
-        r = client.models.generate_content(model=model, contents="Rispondi solo con la parola: ok")
-        print("  risposta:", (r.text or "").strip()[:100])
+        r = client.models.generate_content(model=model, contents="Reply with only the word: ok")
+        print("  reply:", (r.text or "").strip()[:100])
     except Exception as e:
-        print(f"  ERRORE ({type(e).__name__}): {str(e)[:300]}")
+        print(f"  ERROR ({type(e).__name__}): {str(e)[:300]}")
         return 1
 
-    print("\n3) Risposta strutturata (la stessa modalita' usata dall'app):")
+    print("\n3) Structured reply (the same mode used by the app):")
     try:
         r = client.models.generate_content(
             model=model,
-            contents="Scenario: Marte. Rispondi con answer='prova' e gravity='mars'.",
+            contents="Scenario: Mars. Reply with answer='test' and gravity='mars'.",
             config=types.GenerateContentConfig(response_mime_type="application/json",
                                                response_schema=AiReply))
-        print("  JSON ricevuto:", (r.text or "").strip()[:300])
-        print("  validazione schema:", AiReply.model_validate_json(r.text))
+        print("  JSON received:", (r.text or "").strip()[:300])
+        print("  schema validation:", AiReply.model_validate_json(r.text))
     except Exception as e:
-        print(f"  ERRORE ({type(e).__name__}): {str(e)[:300]}")
+        print(f"  ERROR ({type(e).__name__}): {str(e)[:300]}")
         return 1
 
-    print("\nTutto in ordine: l'app puo' usare questa chiave e questo modello.")
+    print("\nAll good: the app can use this key and this model.")
     return 0
 
 

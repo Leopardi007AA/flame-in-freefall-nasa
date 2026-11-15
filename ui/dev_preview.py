@@ -8,16 +8,16 @@ from ui import mock_data
 from ui.mock_data import get_mock_data, get_mock_tables
 from ui.tabs import compare, gaps, real_data
 
-mock_data.IS_MOCK = True   # qui i dati sono finti: banner acceso
+mock_data.IS_MOCK = True   # the data here are fake: banner on
 apply_theme()
 
-st.title("Anteprima interfaccia")
+st.title("Interface preview")
 
 df = get_mock_data()
 scenario = {"gravita": "microgravita", "o2": 21}
 highlight_ids = ["MOCK-1", "MOCK-2", "MOCK-4"]
 
-tab_confronto, tab_dati, tab_lacune = st.tabs(["Confronto", "Dati reali", "Lacune"])
+tab_confronto, tab_dati, tab_lacune = st.tabs(["Compare", "Real data", "Gaps"])
 
 with tab_confronto:
     compare.render(df, scenario, highlight_ids)

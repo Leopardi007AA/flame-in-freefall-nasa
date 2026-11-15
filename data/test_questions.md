@@ -1,26 +1,26 @@
-# Domande di prova per il Copilota
+# Test questions for the Copilot
 
-Le risposte attese sono calcolate dal CSV attuale. Se il CSV cambia, rigenerare gli id attesi.
+The expected answers are computed from the current CSV. If the CSV changes, regenerate the expected ids.
 
-| # | Tipo | Domanda | Risposta corretta del Copilota | Id attesi |
+| # | Type | Question | Correct Copilot answer | Expected ids |
 |---|---|---|---|---|
-| 1 | Risposta nei dati | Quali esperimenti hanno studiato combustibili liquidi? | Elenca le righe giuste con id citati | PSI-69, PSI-39 |
-| 2 | Risposta nei dati | Quali esperimenti usano combustibili gassosi? | Elenca le righe giuste con id citati | PSI-20, PSI-10, PSI-106 |
-| 3 | Risposta nei dati | Quali esperimenti usano combustibili solidi? | Elenca le righe giuste con id citati | PSI-25, PSI-98, PSI-99, PSI-100 |
-| 4 | Risposta nei dati | Quali esperimenti sono stati eseguiti su Cygnus? | Elenca le righe giuste con id citati | PSI-98, PSI-99, PSI-100 |
-| 5 | Risposta nei dati | Quali esperimenti appartengono alla famiglia Saffire? | Elenca le righe giuste con id citati | PSI-98, PSI-99, PSI-100 |
-| 6 | Risposta nei dati | Quali esperimenti appartengono alla famiglia ACME? | Elenca le righe giuste con id citati | PSI-20, PSI-10 |
-| 7 | Risposta nei dati | Per quali esperimenti c'è un intervallo di ossigeno nei dati? | Solo gli esperimenti indicati (BASS-II 14-21%, FLEX 12-30%, Saffire-I 21% previsto); per gli altri «nessun dato» | PSI-25, PSI-69, PSI-98 |
-| 8 | Risposta nei dati | Quali esperimenti hanno un flusso d'aria nei dati? | Gli esperimenti indicati con i loro valori in cm/s | PSI-25, PSI-98, PSI-99, PSI-100, PSI-106 |
-| 9 | Risposta nei dati | A che flusso d'aria è stato condotto Saffire-I? | 20 cm/s, citando PSI-98 | PSI-98 |
-| 10 | Risposta nei dati | Qual è il flusso d'aria massimo di BASS-II? | 40 cm/s (valore della scheda PSI), citando PSI-25 | PSI-25 |
-| 11 | Confronto | Confronta BASS-II e Saffire-I per flusso d'aria. | Tabella coerente con il CSV | PSI-25, PSI-98 |
-| 12 | Confronto | Confronta FLEX e Cool Flames per tipo di combustibile. | Tabella coerente con il CSV | PSI-69, PSI-39 |
-| 13 | Confronto | Confronta ACME BRE e ACME Flame Design per combustibili. | Tabella coerente con il CSV | PSI-20, PSI-10 |
-| 14 | Confronto | Confronta Saffire-I e Saffire-II per flusso d'aria. | Entrambi 20 cm/s | PSI-98, PSI-99 |
-| 15 | Confronto | Confronta BASS-II e FLEX per ossigeno. | BASS-II 14-21% e FLEX 12-30%, entrambi con intervallo | PSI-25, PSI-69 |
-| 16 | Lacuna | Cosa sappiamo sul fuoco a 0,38 g (Marte)? | «Nessun dato a questa gravità» + prove più vicine | (nessuno) |
-| 17 | Lacuna | Cosa sappiamo sul fuoco a 0,16 g (Luna)? | «Nessun dato a questa gravità» + prove più vicine | (nessuno) |
-| 18 | Lacuna | Quali esperimenti hanno dati di pressione? | FLEX (10.3-14.7 psia) e Saffire-II (14.5 psia); per gli altri «nessun dato» | PSI-69, PSI-99 |
-| 19 | Trabocchetto | Qual è la velocità di propagazione della fiamma di Saffire-III a 40% di O2? | Rifiuta: «Nessun dato», non inventa | PSI-100 (da non usare per numeri) |
-| 20 | Trabocchetto | Qual è la temperatura massima raggiunta in FLEX? | Rifiuta: nessuna temperatura nei dati | PSI-69 (da non usare per numeri) |
+| 1 | Answer in the data | Which experiments studied liquid fuels? | Lists the right rows with cited ids | PSI-69, PSI-39 |
+| 2 | Answer in the data | Which experiments use gaseous fuels? | Lists the right rows with cited ids | PSI-20, PSI-10, PSI-106 |
+| 3 | Answer in the data | Which experiments use solid fuels? | Lists the right rows with cited ids | PSI-25, PSI-98, PSI-99, PSI-100 |
+| 4 | Answer in the data | Which experiments were run on Cygnus? | Lists the right rows with cited ids | PSI-98, PSI-99, PSI-100 |
+| 5 | Answer in the data | Which experiments belong to the Saffire family? | Lists the right rows with cited ids | PSI-98, PSI-99, PSI-100 |
+| 6 | Answer in the data | Which experiments belong to the ACME family? | Lists the right rows with cited ids | PSI-20, PSI-10 |
+| 7 | Answer in the data | For which experiments is there an oxygen range in the data? | Only the experiments indicated (BASS-II 14-21%, FLEX 12-30%, Saffire-I 21% expected); for the others “no data” | PSI-25, PSI-69, PSI-98 |
+| 8 | Answer in the data | Which experiments have an airflow in the data? | The experiments indicated with their values in cm/s | PSI-25, PSI-98, PSI-99, PSI-100, PSI-106 |
+| 9 | Answer in the data | At what airflow was Saffire-I run? | 20 cm/s, citing PSI-98 | PSI-98 |
+| 10 | Answer in the data | What is the maximum airflow of BASS-II? | 40 cm/s (value from the PSI page), citing PSI-25 | PSI-25 |
+| 11 | Comparison | Compare BASS-II and Saffire-I on airflow. | Table consistent with the CSV | PSI-25, PSI-98 |
+| 12 | Comparison | Compare FLEX and Cool Flames by fuel type. | Table consistent with the CSV | PSI-69, PSI-39 |
+| 13 | Comparison | Compare ACME BRE and ACME Flame Design by fuels. | Table consistent with the CSV | PSI-20, PSI-10 |
+| 14 | Comparison | Compare Saffire-I and Saffire-II on airflow. | Both 20 cm/s | PSI-98, PSI-99 |
+| 15 | Comparison | Compare BASS-II and FLEX on oxygen. | BASS-II 14-21% and FLEX 12-30%, both with a range | PSI-25, PSI-69 |
+| 16 | Gap | What do we know about fire at 0.38 g (Mars)? | “No data at this gravity” + closest evidence | (none) |
+| 17 | Gap | What do we know about fire at 0.16 g (Moon)? | “No data at this gravity” + closest evidence | (none) |
+| 18 | Gap | Which experiments have pressure data? | FLEX (10.3-14.7 psia) and Saffire-II (14.5 psia); for the others “no data” | PSI-69, PSI-99 |
+| 19 | Trap | What is the flame propagation speed of Saffire-III at 40% O2? | Refuses: “No data”, does not invent | PSI-100 (do not use for numbers) |
+| 20 | Trap | What is the maximum temperature reached in FLEX? | Refuses: no temperature in the data | PSI-69 (do not use for numbers) |

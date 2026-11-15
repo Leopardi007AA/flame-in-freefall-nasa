@@ -4,7 +4,7 @@ CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* ---------- 3.4 SFONDO CON STELLE E LUCI ---------- */
+/* ---------- 3.4 STARRY BACKGROUND WITH GLOWS ---------- */
 .stApp,
 [data-testid="stAppViewContainer"],
 [data-testid="stMain"] {
@@ -38,7 +38,7 @@ CSS = """
 header[data-testid="stHeader"] { background: transparent !important; }
 #MainMenu, footer { visibility: hidden; }
 
-/* ---------- CARD DI VETRO (classe da usare in HTML) ---------- */
+/* ---------- GLASS CARD (class to use in HTML) ---------- */
 .glass {
     background: linear-gradient(150deg, rgba(255,255,255,.10), rgba(255,255,255,.035));
     border: 1px solid rgba(255,255,255,.14);
@@ -50,7 +50,7 @@ header[data-testid="stHeader"] { background: transparent !important; }
 }
 .glass:hover { transform: translateY(-4px); }
 
-/* ---------- 3.5 TITOLI, TESTI E CARATTERI ---------- */
+/* ---------- 3.5 HEADINGS, TEXT AND FONTS ---------- */
 h1, h2, h3, h4 {
     font-family: 'Space Grotesk', sans-serif !important;
     color: rgba(255,255,255,.92) !important;
@@ -68,7 +68,7 @@ p, li, label, .stMarkdown {
     color: rgba(255,255,255,.72);
 }
 
-/* ---------- 3.6 SCHEDE (st.tabs) ---------- */
+/* ---------- 3.6 TABS (st.tabs) ---------- */
 button[data-baseweb="tab"] {
     background: transparent !important;
     color: rgba(255,255,255,.72) !important;
@@ -85,7 +85,7 @@ button[data-baseweb="tab"][aria-selected="true"] {
     background-color: rgba(255,255,255,.14) !important;
 }
 
-/* ---------- 3.7 PULSANTI ---------- */
+/* ---------- 3.7 BUTTONS ---------- */
 .stButton > button,
 .stDownloadButton > button,
 .stLinkButton > a {
@@ -102,7 +102,7 @@ button[data-baseweb="tab"][aria-selected="true"] {
     transform: translateY(-4px);
 }
 
-/* ---------- 3.7 MENU A TENDINA E SELEZIONE MULTIPLA ---------- */
+/* ---------- 3.7 DROPDOWNS AND MULTISELECT ---------- */
 div[data-baseweb="select"] > div {
     background: rgba(255,255,255,.07) !important;
     border: 1px solid rgba(255,255,255,.14) !important;
@@ -122,13 +122,13 @@ div[data-baseweb="popover"] li:hover {
     background: rgba(255,138,76,.18) !important;
 }
 
-/* ---------- 3.7 CURSORI ---------- */
+/* ---------- 3.7 SLIDERS ---------- */
 [data-testid="stSlider"] [role="slider"] {
     background-color: #ff8a4c !important;
     border-color: #ff8a4c !important;
 }
 
-/* ---------- 3.8 CONTENITORI CON BORDO (st.container(border=True)) ---------- */
+/* ---------- 3.8 BORDERED CONTAINERS (st.container(border=True)) ---------- */
 [data-testid="stVerticalBlockBorderWrapper"] {
     background: linear-gradient(150deg, rgba(255,255,255,.10), rgba(255,255,255,.035));
     border: 1px solid rgba(255,255,255,.14) !important;
@@ -141,7 +141,7 @@ div[data-baseweb="popover"] li:hover {
 [data-testid="stVerticalBlockBorderWrapper"]:hover {
     transform: translateY(-4px);}
     
-/* ---------- 4. COMPONENTI ---------- */
+/* ---------- 4. COMPONENTS ---------- */
 .card-title {
     font-family: 'Space Grotesk', sans-serif;
     font-size: 18px;
@@ -219,7 +219,7 @@ div[data-baseweb="popover"] li:hover {
     border-color: rgba(168,176,196,.5);
 }
 
-/* ---------- 3.9 ACCESSIBILITA' ---------- */
+/* ---------- 3.9 ACCESSIBILITY ---------- */
 *:focus-visible {
     outline: 2px solid #5ce1e6 !important;
     outline-offset: 2px;

@@ -1,5 +1,5 @@
-"""Test di fumo: app.py si importa ed esegue fino in fondo con Streamlit finto,
-e il flusso di una domanda all'AI (con risposta simulata) applica l'azione alla dashboard."""
+"""Smoke tests: app.py imports and runs to the end with a fake Streamlit,
+and the flow of a question to the AI (with a simulated answer) applies the action to the dashboard."""
 import runpy
 import sys
 import unittest
@@ -22,11 +22,11 @@ class TestSmoke(unittest.TestCase):
         st.set_page_config.assert_called_once()
 
     def test_question_sets_pending_action(self):
-        st = fake_streamlit.install(chat_question="Mostrami la Luna")
-        fake_reply = AiReply(gravity="moon", o2=26.5, answer="Nessun dato a 0,16 g.")
+        st = fake_streamlit.install(chat_question="Show me the Moon")
+        fake_reply = AiReply(gravity="moon", o2=26.5, answer="No data at 0.16 g.")
         with patch("src.ai_engine.answer_question",
                    return_value={"source": "ai", "reply": fake_reply, "problems": []}):
-            with self.assertRaises(SystemExit):          # st.rerun() finto
+            with self.assertRaises(SystemExit):          # fake st.rerun()
                 runpy.run_path(str(ROOT / "app.py"))
         self.assertEqual(st.session_state["pending_action"]["gravity"], "moon")
         self.assertEqual(st.session_state["chat"][-1]["role"], "assistant")
@@ -38,7 +38,7 @@ class TestSmoke(unittest.TestCase):
         runpy.run_path(str(ROOT / "app.py"))
         self.assertEqual(st.session_state["gravity"], "moon")
         self.assertEqual(st.session_state["o2"], 26.5)
-        self.assertEqual(st.session_state["pressure"], 10.2)      # invariato
+        self.assertEqual(st.session_state["pressure"], 10.2)      # unchanged
         self.assertEqual(st.session_state["highlight_ids"], ["MOCK-1"])
         self.assertNotIn("pending_action", st.session_state)
 
@@ -47,8 +47,8 @@ class TestFlameLab(unittest.TestCase):
     def test_all_gravities_build(self):
         for g in flame_lab.GRAVITY:
             html = flame_lab.build_html(g, 30, 10.2, 5)
-            self.assertIn("Resa illustrativa", html)
-            self.assertNotIn("__", html)                  # nessun segnaposto rimasto
+            self.assertIn("Illustrative rendering", html)
+            self.assertNotIn("__", html)                  # no placeholder left
 
     def test_more_oxygen_means_bigger_flame(self):
         low = flame_lab.flame_params("mars", 21, 0)
@@ -61,7 +61,7 @@ class TestFlameLab(unittest.TestCase):
 
     def test_unknown_gravity(self):
         with self.assertRaises(ValueError):
-            flame_lab.build_html("venere", 21, 14.7, 0)
+            flame_lab.build_html("venus", 21, 14.7, 0)
 
 
 if __name__ == "__main__":

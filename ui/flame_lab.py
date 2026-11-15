@@ -1,22 +1,22 @@
-"""ui/flame_lab.py - la fiamma animata (resa ILLUSTRATIVA, non una simulazione fisica).
+"""ui/flame_lab.py - the animated flame (ILLUSTRATIVE rendering, not a physical simulation).
 
-build_html() e' una funzione pura (testabile senza Streamlit); render() la mostra nell'app.
-Valori presi dal prototipo grafico del progetto.
+build_html() is a pure function (testable without Streamlit); render() shows it in the app.
+Values taken from the project's graphic prototype.
 """
 
 STAGE_H = 420
 
 GRAVITY = {
-    "earth": dict(name="Terra", g="1", w=118, h=236, br="50% 50% 50% 50% / 70% 70% 30% 30%", dur="1.05s",
+    "earth": dict(name="Earth", g="1", w=118, h=236, br="50% 50% 50% 50% / 70% 70% 30% 30%", dur="1.05s",
                   anim="flicker", origin="50% 100%", bottom=58, mid_b=7, core_b=12, center=False,
                   outer="rgba(255,86,24,.82)", mid="#ffa238", core="#fff0bd", halo="rgba(255,110,40,"),
-    "mars": dict(name="Marte", g="0,38", w=140, h=208, br="50% 50% 50% 50% / 64% 64% 36% 36%", dur="1.5s",
+    "mars": dict(name="Mars", g="0.38", w=140, h=208, br="50% 50% 50% 50% / 64% 64% 36% 36%", dur="1.5s",
                  anim="flicker", origin="50% 100%", bottom=84, mid_b=7, core_b=12, center=False,
                  outer="rgba(255,100,50,.80)", mid="#ffb06a", core="#fff0d8", halo="rgba(255,115,60,"),
-    "moon": dict(name="Luna", g="0,16", w=168, h=180, br="50% 50% 50% 50% / 56% 56% 44% 44%", dur="2.2s",
+    "moon": dict(name="Moon", g="0.16", w=168, h=180, br="50% 50% 50% 50% / 56% 56% 44% 44%", dur="2.2s",
                  anim="flicker", origin="50% 100%", bottom=110, mid_b=8, core_b=14, center=False,
                  outer="rgba(255,120,110,.76)", mid="#ffc08a", core="#fff6ea", halo="rgba(255,130,120,"),
-    "iss": dict(name="Microgravità", g="0", w=190, h=190, br="50%", dur="3.4s",
+    "iss": dict(name="Microgravity", g="0", w=190, h=190, br="50%", dur="3.4s",
                 anim="breathe", origin="50% 50%", bottom=0, mid_b=19, core_b=35, center=True,
                 outer="rgba(70,140,255,.78)", mid="#7fd0ff", core="#effcff", halo="rgba(80,150,255,"),
 }
@@ -25,11 +25,11 @@ O2_MIN, O2_MAX = 21.0, 85.0
 
 
 def _fmt(n) -> str:
-    return f"{n:g}".replace(".", ",")
+    return f"{n:g}"
 
 
 def flame_params(gravity: str, o2: float, flow: float) -> dict:
-    """Dimensioni e intensita' della fiamma per i parametri dati (usato anche nei test)."""
+    """Flame size and intensity for the given parameters (also used in the tests)."""
     g = GRAVITY[gravity]
     k = max(0.0, min(1.0, (o2 - O2_MIN) / (O2_MAX - O2_MIN)))
     f = 0.75 + k * 0.65
@@ -70,7 +70,7 @@ html,body{margin:0;background:transparent;font-family:'JetBrains Mono',ui-monosp
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style></head><body>
-<div class="stage" role="img" aria-label="Fiamma illustrativa: __NAME__, __G__ g, ossigeno __O2__ percento">
+<div class="stage" role="img" aria-label="Illustrative flame: __NAME__, __G__ g, oxygen __O2__ percent">
 __STREAKS__
 <div class="fit"><div class="lean" style="transform:translateX(__SHIFT__px) rotate(__LEAN__deg)">
   <div style="__HALO__"></div>
@@ -82,14 +82,14 @@ __STREAKS__
 </div></div>
 <div class="tag" style="left:18px;top:16px">g = __G__</div>
 <div class="tag" style="right:18px;top:16px">__NAME__</div>
-<div class="tag badge-tag" style="left:50%;top:16px;transform:translateX(-50%)"><span class="chip badge">Resa illustrativa · non CFD</span></div>
-<div class="chips"><span class="chip">O₂ __O2__ %</span><span class="chip">P __P__ psia</span><span class="chip">Flusso __FLOW__ cm/s</span></div>
+<div class="tag badge-tag" style="left:50%;top:16px;transform:translateX(-50%)"><span class="chip badge">Illustrative rendering · not CFD</span></div>
+<div class="chips"><span class="chip">O₂ __O2__ %</span><span class="chip">P __P__ psia</span><span class="chip">Airflow __FLOW__ cm/s</span></div>
 </div></body></html>"""
 
 
 def build_html(gravity: str, o2: float, pressure: float, flow: float) -> str:
     if gravity not in GRAVITY:
-        raise ValueError(f"gravita' sconosciuta: {gravity}")
+        raise ValueError(f"unknown gravity: {gravity}")
     g = GRAVITY[gravity]
     p = flame_params(gravity, o2, flow)
     w, h, bottom, k = p["w"], p["h"], p["bottom"], p["k"]
@@ -126,6 +126,6 @@ def build_html(gravity: str, o2: float, pressure: float, flow: float) -> str:
 
 
 def render(gravity: str, o2: float, pressure: float, flow: float, height: int = STAGE_H + 10) -> None:
-    """Mostra la fiamma nell'app Streamlit."""
+    """Shows the flame in the Streamlit app."""
     import streamlit.components.v1 as components
     components.html(build_html(gravity, o2, pressure, flow), height=height)

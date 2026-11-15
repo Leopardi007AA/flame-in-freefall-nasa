@@ -1,4 +1,4 @@
-"""Test dei moduli puri (senza Streamlit ne' Gemini). Esegui dalla radice del progetto:
+"""Tests of the pure modules (without Streamlit or Gemini). Run from the project root:
     python -m unittest discover -s tests -v
 """
 import subprocess
@@ -38,7 +38,7 @@ class TestLoader(unittest.TestCase):
         df = data_loader.load_investigations(data_loader.MOCK_PATH)
         self.assertEqual(len(df), 6)
         self.assertTrue(data_loader.is_mock(df))
-        self.assertTrue(df["o2_min"].isna().any())          # celle vuote = NaN, mai 0
+        self.assertTrue(df["o2_min"].isna().any())          # empty cells = NaN, never 0
         self.assertFalse((df["o2_min"] == 0).any())
 
     def test_papers_missing_is_empty_list(self):
@@ -58,8 +58,8 @@ class TestValidateCsv(unittest.TestCase):
     def test_bad_values_fail(self):
         df = pd.read_csv(ROOT / "dev" / "investigations_mock.csv")
         df.loc[0, "o2_min"] = 50          # min > max
-        df.loc[1, "gravita"] = "marte"     # valore non ammesso
-        df.loc[2, "id"] = "MOCK-1"         # id duplicato
+        df.loc[1, "gravita"] = "marte"     # value not allowed
+        df.loc[2, "id"] = "MOCK-1"         # duplicate id
         out = ROOT / "tests" / "_bad.csv"
         df.to_csv(out, index=False)
         try:
@@ -68,8 +68,8 @@ class TestValidateCsv(unittest.TestCase):
             out.unlink()
         self.assertEqual(r.returncode, 1)
         self.assertIn("min > max", r.stdout)
-        self.assertIn("non ammesso", r.stdout)
-        self.assertIn("duplicati", r.stdout)
+        self.assertIn("not allowed", r.stdout)
+        self.assertIn("duplicate", r.stdout)
 
 
 class TestScoring(unittest.TestCase):
@@ -83,7 +83,7 @@ class TestScoring(unittest.TestCase):
 
     def test_missing_data_gets_zero_points(self):
         r = scoring.rank(self.df, ISS).set_index("id")
-        self.assertIn("nessun dato", " ".join(r.loc["MOCK-5", "why"]))
+        self.assertIn("no data", " ".join(r.loc["MOCK-5", "why"]))
 
     def test_microgravity_matches_iss_better_than_earth_experiment(self):
         r = scoring.rank(self.df, ISS).set_index("id")
@@ -101,13 +101,13 @@ class TestAiValidation(unittest.TestCase):
         self.df = data_loader.load_investigations(data_loader.MOCK_PATH)
 
     def test_valid_reply_passes(self):
-        r = AiReply(answer="MOCK-1 copre O2 da 21 a 35.", citations=["MOCK-1"], highlight_ids=["MOCK-1"])
+        r = AiReply(answer="MOCK-1 covers O2 from 21 to 35.", citations=["MOCK-1"], highlight_ids=["MOCK-1"])
         reply, problems = validate_reply(r, self.df, MARS)
         self.assertEqual(problems, [])
         self.assertIsNotNone(reply)
 
     def test_invented_number_rejected(self):
-        r = AiReply(answer="La propagazione e' 7,3 cm/s.", citations=["MOCK-1"])
+        r = AiReply(answer="The propagation speed is 7.3 cm/s.", citations=["MOCK-1"])
         reply, problems = validate_reply(r, self.df, MARS)
         self.assertIsNone(reply)
         self.assertIn("7.3", " ".join(problems))
@@ -117,11 +117,11 @@ class TestAiValidation(unittest.TestCase):
         self.assertIsNone(reply)
 
     def test_no_data_statement_passes(self):
-        reply, _ = validate_reply(AiReply(answer="Nessun dato a 0,38 g."), self.df, MARS)
+        reply, _ = validate_reply(AiReply(answer="No data at 0.38 g."), self.df, MARS)
         self.assertIsNotNone(reply)
 
     def test_numbers_without_citations_rejected(self):
-        reply, problems = validate_reply(AiReply(answer="Vale 30 percento."), self.df, MARS)
+        reply, problems = validate_reply(AiReply(answer="It is 30 percent."), self.df, MARS)
         self.assertIsNone(reply)
 
     def test_schema_bounds(self):
@@ -132,19 +132,19 @@ class TestAiValidation(unittest.TestCase):
 class TestFallbackAndLimiter(unittest.TestCase):
     def test_fallback_is_revalidated(self):
         df = data_loader.load_investigations(data_loader.MOCK_PATH)
-        answers = {normalize_question("Che cosa copre MOCK-1?"):
-                   {"answer": "MOCK-1 copre O2 da 21 a 35.", "citations": ["MOCK-1"]}}
-        self.assertIsNotNone(fallback_answer("che cosa copre mock-1", df, MARS, answers))
-        bad = {normalize_question("domanda"): {"answer": "Vale 99.", "citations": ["MOCK-1"]}}
-        self.assertIsNone(fallback_answer("domanda", df, MARS, bad))
-        self.assertIsNone(fallback_answer("sconosciuta", df, MARS, answers))
+        answers = {normalize_question("What does MOCK-1 cover?"):
+                   {"answer": "MOCK-1 covers O2 from 21 to 35.", "citations": ["MOCK-1"]}}
+        self.assertIsNotNone(fallback_answer("what does mock-1 cover", df, MARS, answers))
+        bad = {normalize_question("question"): {"answer": "It is 99.", "citations": ["MOCK-1"]}}
+        self.assertIsNone(fallback_answer("question", df, MARS, bad))
+        self.assertIsNone(fallback_answer("unknown", df, MARS, answers))
 
     def test_rate_limiter(self):
         rl = RateLimiter(max_calls=2, min_interval=3.0)
         self.assertTrue(rl.allow(now=0.0)[0])
-        self.assertFalse(rl.allow(now=1.0)[0])      # troppo presto
+        self.assertFalse(rl.allow(now=1.0)[0])      # too early
         self.assertTrue(rl.allow(now=5.0)[0])
-        self.assertFalse(rl.allow(now=20.0)[0])     # limite di sessione
+        self.assertFalse(rl.allow(now=20.0)[0])     # session limit
 
 
 if __name__ == "__main__":

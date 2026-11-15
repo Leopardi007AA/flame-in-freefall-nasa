@@ -8,11 +8,19 @@ from ui.components import badge
 from ui.mock_data import show_mock_banner
 from ui.plotly_theme import style_fig
 
-# Nome della chiave dell'ossigeno dentro "scenario".
-# DA CONFERMARE CON A: se lui la chiama in un altro modo, cambia solo questa riga.
+# Name of the oxygen key inside "scenario".
+# TO CONFIRM WITH A: if A names it differently, change only this line.
 CHIAVE_O2 = "o2"
 
-NESSUN_DATO = "— " + badge("NESSUN DATO", "nodata")
+NESSUN_DATO = "— " + badge("NO DATA", "nodata")
+
+# The CSV keeps its Italian values (they are the data contract used by the code);
+# these maps only change what the dashboard SHOWS. A value that is not in a map is shown as is.
+ETICHETTE_STATO = {"solido": "Solid", "liquido": "Liquid", "gassoso": "Gas",
+                   "misto": "Mixed", "fumo": "Smoke"}
+ETICHETTE_AREA = {"prevenzione": "Prevention", "rilevazione": "Detection",
+                  "soppressione": "Suppression"}
+ETICHETTE_DATI_GREZZI = {"si": "Yes", "no": "No", "parziale": "Partial"}
 
 CSS = """
 <style>
@@ -39,30 +47,35 @@ CSS = """
 """
 
 
-# ---------- piccole funzioni di aiuto ----------
+# ---------- small helper functions ----------
 
 def manca(valore) -> bool:
-    """Vero se la cella è vuota. Lo zero NON è vuoto: è un dato vero."""
+    """True if the cell is empty. Zero is NOT empty: it is a real value."""
     return pd.isna(valore) or str(valore).strip() == ""
 
 
 def numero(x) -> str:
-    """26.0 diventa '26', 26.5 resta '26.5'."""
+    """26.0 becomes '26', 26.5 stays '26.5'."""
     return f"{float(x):g}"
 
 
-def testo(valore, elenco=False):
-    """Restituisce il testo della cella, oppure None se manca."""
+def testo(valore, elenco=False, etichette=None):
+    """Returns the text of the cell, or None if it is missing.
+
+    elenco: the cell holds a list separated by "|" and it is shown separated by commas.
+    etichette: optional map {data value: displayed label}.
+    """
     if manca(valore):
         return None
     t = str(valore).strip()
-    if elenco:
-        t = ", ".join(parte.strip() for parte in t.split("|"))
-    return t
+    parti = [p.strip() for p in t.split("|")] if elenco else [t]
+    if etichette:
+        parti = [etichette.get(p, p) for p in parti]
+    return ", ".join(parti)
 
 
 def intervallo(minimo, massimo, unita):
-    """Restituisce '21–30 %', '21 %', 'min 21 %'... oppure None se mancano entrambi."""
+    """Returns '21–30 %', '21 %', 'min 21 %'... or None if both are missing."""
     if manca(minimo) and manca(massimo):
         return None
     if manca(minimo):
@@ -75,7 +88,7 @@ def intervallo(minimo, massimo, unita):
 
 
 def ossigeno_scenario(scenario):
-    """Legge l'ossigeno dello scenario. Restituisce None se non c'è."""
+    """Reads the scenario's oxygen. Returns None if there is none."""
     try:
         return float((scenario or {}).get(CHIAVE_O2))
     except (TypeError, ValueError):
@@ -83,16 +96,16 @@ def ossigeno_scenario(scenario):
 
 
 def attributi(riga) -> dict:
-    """Le righe della tabella per UN esperimento."""
+    """The table rows for ONE experiment."""
     return {
-        "Stato del combustibile": testo(riga["stato_combustibile"]),
-        "Combustibili": testo(riga["combustibili"], elenco=True),
-        "Ossigeno": intervallo(riga["o2_min"], riga["o2_max"], "%"),
-        "Pressione": intervallo(riga["pressione_min_psia"], riga["pressione_max_psia"], "psia"),
-        "Flusso": intervallo(riga["flusso_min_cm_s"], riga["flusso_max_cm_s"], "cm/s"),
-        "Sensori": testo(riga["sensori"], elenco=True),
-        "Area di sicurezza": testo(riga["area_sicurezza"], elenco=True),
-        "Dati grezzi": testo(riga["dati_grezzi"]),
+        "Fuel state": testo(riga["stato_combustibile"], etichette=ETICHETTE_STATO),
+        "Fuels": testo(riga["combustibili"], elenco=True),
+        "Oxygen": intervallo(riga["o2_min"], riga["o2_max"], "%"),
+        "Pressure": intervallo(riga["pressione_min_psia"], riga["pressione_max_psia"], "psia"),
+        "Airflow": intervallo(riga["flusso_min_cm_s"], riga["flusso_max_cm_s"], "cm/s"),
+        "Sensors": testo(riga["sensori"], elenco=True),
+        "Safety area": testo(riga["area_sicurezza"], elenco=True, etichette=ETICHETTE_AREA),
+        "Raw data": testo(riga["dati_grezzi"], etichette=ETICHETTE_DATI_GREZZI),
     }
 
 
@@ -102,12 +115,12 @@ def cella(valore) -> str:
     return html.escape(valore)
 
 
-# ---------- le tre parti della scheda ----------
+# ---------- the three parts of the tab ----------
 
 def tabella(scelti: pd.DataFrame) -> None:
     colonne = [attributi(riga) for _, riga in scelti.iterrows()]
 
-    intestazione = '<tr><th scope="col">Attributo</th>'
+    intestazione = '<tr><th scope="col">Attribute</th>'
     for nome in scelti["nome"]:
         intestazione += f'<th scope="col">{html.escape(str(nome))}</th>'
     intestazione += "</tr>"
@@ -125,7 +138,7 @@ def tabella(scelti: pd.DataFrame) -> None:
         unsafe_allow_html=True,
     )
     st.markdown(
-        '<span class="mono-label">Sfondo arancio = gli esperimenti differiscono su questa riga</span>',
+        '<span class="mono-label">Orange background = the experiments differ on this row</span>',
         unsafe_allow_html=True,
     )
 
@@ -143,7 +156,7 @@ def grafico_ossigeno(scelti: pd.DataFrame, scenario: dict) -> None:
         fig.add_trace(
             go.Bar(
                 y=[riga["nome"]],
-                x=[max(massimo - minimo, 0.3)],  # almeno 0.3 per vedere un valore singolo
+                x=[max(massimo - minimo, 0.3)],  # at least 0.3 so that a single value is visible
                 base=[minimo],
                 orientation="h",
                 name=str(riga["nome"]),
@@ -154,7 +167,7 @@ def grafico_ossigeno(scelti: pd.DataFrame, scenario: dict) -> None:
 
     if not fig.data:
         st.markdown(
-            "Nessun esperimento scelto ha i valori di ossigeno. " + badge("NESSUN DATO", "nodata"),
+            "None of the selected experiments has oxygen values. " + badge("NO DATA", "nodata"),
             unsafe_allow_html=True,
         )
         return
@@ -172,7 +185,7 @@ def grafico_ossigeno(scelti: pd.DataFrame, scenario: dict) -> None:
 
     style_fig(fig, height=140 + 60 * len(fig.data))
     fig.update_layout(
-        title="Intervalli di ossigeno (% in volume)",
+        title="Oxygen ranges (% by volume)",
         barmode="overlay",
         showlegend=False,
     )
@@ -181,7 +194,7 @@ def grafico_ossigeno(scelti: pd.DataFrame, scenario: dict) -> None:
 
     if esclusi:
         st.markdown(
-            f'<span class="mono-label">Esperimenti senza dati di ossigeno (non mostrati nel grafico): {esclusi}</span>',
+            f'<span class="mono-label">Experiments without oxygen data (not shown in the chart): {esclusi}</span>',
             unsafe_allow_html=True,
         )
 
@@ -192,15 +205,15 @@ def bottoni_psi(scelti: pd.DataFrame) -> None:
         with col:
             if manca(riga["url_psi"]):
                 st.markdown(
-                    f'{html.escape(str(riga["nome"]))}: scheda PSI non disponibile '
-                    + badge("NESSUN DATO", "nodata"),
+                    f'{html.escape(str(riga["nome"]))}: PSI page not available '
+                    + badge("NO DATA", "nodata"),
                     unsafe_allow_html=True,
                 )
             else:
-                st.link_button(f'Apri la scheda PSI · {riga["nome"]}', riga["url_psi"])
+                st.link_button(f'Open the PSI page · {riga["nome"]}', riga["url_psi"])
 
 
-# ---------- la funzione che chiama A ----------
+# ---------- the function that A calls ----------
 
 def render(df: pd.DataFrame, scenario: dict, highlight_ids: list) -> None:
     st.markdown(CSS, unsafe_allow_html=True)
@@ -210,7 +223,7 @@ def render(df: pd.DataFrame, scenario: dict, highlight_ids: list) -> None:
     preselezionati = [i for i in (highlight_ids or []) if i in nomi][:3]
 
     selezione = st.multiselect(
-        "Scegli fino a 3 esperimenti da confrontare",
+        "Choose up to 3 experiments to compare",
         options=df["id"].tolist(),
         default=preselezionati,
         max_selections=3,
@@ -218,7 +231,7 @@ def render(df: pd.DataFrame, scenario: dict, highlight_ids: list) -> None:
     )
 
     if not selezione:
-        st.write("Scegli almeno un esperimento per vedere il confronto.")
+        st.write("Choose at least one experiment to see the comparison.")
         return
 
     scelti = df.set_index("id").loc[selezione].reset_index()

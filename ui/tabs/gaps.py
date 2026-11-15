@@ -6,27 +6,27 @@ import streamlit as st
 from ui.components import badge
 from ui.mock_data import show_mock_banner
 
-# Chiavi che A usa dentro "scenario".
-# DA CONFERMARE CON A: se le chiama in un altro modo, cambia solo queste due righe.
+# Keys that A uses inside "scenario".
+# TO CONFIRM WITH A: if A names them differently, change only these two lines.
 CHIAVE_GRAVITA = "gravita"
 CHIAVE_O2 = "o2"
 
-# Colonne della griglia: (nome interno, etichetta mostrata)
+# Grid columns: (internal name, displayed label)
 COLONNE = [
     ("1g", "1 g"),
-    ("marte", "0,38 g (Marte)"),
-    ("luna", "0,16 g (Luna)"),
-    ("microgravita", "0 g (microgravità)"),
+    ("marte", "0.38 g (Mars)"),
+    ("luna", "0.16 g (Moon)"),
+    ("microgravita", "0 g (microgravity)"),
 ]
 
-# Righe della griglia: ossigeno in % di volume
+# Grid rows: oxygen in % by volume
 OSSIGENO = [21, 26.5, 30, 40, 60]
 
-# Valore della colonna "gravita" nei dati -> colonna della griglia.
-# Marte e Luna non ci sono: restano vuote finché nessun dato le giustifica.
+# Value of the "gravita" column in the data -> grid column.
+# Mars and Moon are not there: they stay empty until some data justify them.
 GRAVITA_A_COLONNA = {"1g": "1g", "microgravita": "microgravita"}
 
-# Gravità numerica dello scenario (in g) -> colonna della griglia
+# Numeric gravity of the scenario (in g) -> grid column
 GRAVITA_NUMERICA = {"1g": 1.0, "marte": 0.38, "luna": 0.16, "microgravita": 0.0}
 
 CSS = """
@@ -109,22 +109,22 @@ CSS = """
 
 
 # ======================================================================
-# PARTE 1: il calcolo (nessun disegno). A può riusare coverage(df).
+# PART 1: the computation (no drawing). A can reuse coverage(df).
 # ======================================================================
 
 def manca(valore) -> bool:
-    """Vero se la cella è vuota. Lo zero NON è vuoto: è un dato vero."""
+    """True if the cell is empty. Zero is NOT empty: it is a real value."""
     return pd.isna(valore) or str(valore).strip() == ""
 
 
 def coverage(df: pd.DataFrame) -> dict:
-    """Calcola quali celle della griglia sono testate.
+    """Computes which grid cells are tested.
 
-    Restituisce un dizionario con tre voci:
-      "celle": {(colonna, ossigeno): [nomi degli esperimenti]}
-               la lista è vuota se la cella non ha dati
-      "senza_ossigeno": quanti esperimenti sono esclusi perché mancano i numeri di ossigeno
-      "senza_colonna": quanti esperimenti non finiscono in nessuna colonna di gravità
+    Returns a dictionary with three entries:
+      "celle": {(column, oxygen): [experiment names]}
+               the list is empty if the cell has no data
+      "senza_ossigeno": how many experiments are excluded because the oxygen numbers are missing
+      "senza_colonna": how many experiments do not fall in any gravity column
     """
     celle = {(chiave, o2): [] for chiave, _ in COLONNE for o2 in OSSIGENO}
     senza_ossigeno = 0
@@ -152,7 +152,7 @@ def coverage(df: pd.DataFrame) -> dict:
 
 
 # ======================================================================
-# PARTE 2: lo scenario (quale cella evidenziare)
+# PART 2: the scenario (which cell to highlight)
 # ======================================================================
 
 def ossigeno_scenario(scenario):
@@ -163,9 +163,9 @@ def ossigeno_scenario(scenario):
 
 
 def colonna_scenario(scenario):
-    """Trasforma la gravità dello scenario in una colonna. None se non la riconosce."""
+    """Turns the scenario's gravity into a column. None if it does not recognize it."""
     app = {"earth": "1g", "mars": "marte", "moon": "luna", "iss": "microgravita"}
-    if (scenario or {}).get("gravity") in app:      # chiave usata da app.py
+    if (scenario or {}).get("gravity") in app:      # key used by app.py
         return app[scenario["gravity"]]
     valore = (scenario or {}).get(CHIAVE_GRAVITA)
     try:
@@ -179,25 +179,25 @@ def colonna_scenario(scenario):
 
 
 # ======================================================================
-# PARTE 3: il disegno
+# PART 3: the drawing
 # ======================================================================
 
 def disegna_griglia(risultato: dict, scenario: dict) -> bool:
-    """Disegna la griglia. Restituisce True se ha evidenziato la cella dello scenario."""
+    """Draws the grid. Returns True if it highlighted the scenario's cell."""
     celle = risultato["celle"]
     colonna_ora = colonna_scenario(scenario)
     o2_ora = ossigeno_scenario(scenario)
     ultima = COLONNE[-1][0]
     evidenziata = False
 
-    # Prima riga: intestazioni delle colonne
+    # First row: column headers
     out = '<div class="gap-grid"><div></div>'
     for _, etichetta in COLONNE:
         out += f'<div class="gap-head">{etichetta}</div>'
 
-    # Una riga per ogni valore di ossigeno
+    # One row for each oxygen value
     for o2 in OSSIGENO:
-        out += f'<div class="gap-head">{str(o2).replace(".", ",")} % O₂</div>'
+        out += f'<div class="gap-head">{o2} % O₂</div>'
 
         for chiave, _ in COLONNE:
             nomi = celle[(chiave, o2)]
@@ -213,18 +213,18 @@ def disegna_griglia(risultato: dict, scenario: dict) -> bool:
             if nomi:
                 elenco = "<br>".join(html.escape(n) for n in nomi[:8])
                 if len(nomi) > 8:
-                    elenco += f"<br>… e altri {len(nomi) - 8}"
+                    elenco += f"<br>… and {len(nomi) - 8} more"
                 corpo = (
-                    f'<div class="gap-main">● TESTATO · {len(nomi)}</div>'
-                    f'<div class="gap-tip">Esperimenti:<br>{elenco}</div>'
+                    f'<div class="gap-main">● TESTED · {len(nomi)}</div>'
+                    f'<div class="gap-tip">Experiments:<br>{elenco}</div>'
                 )
                 extra = ' tabindex="0"'
             else:
-                # Una sola etichetta per la cella dello scenario; le altre celle vuote
-                # mostrano solo «—» (la legenda sotto spiega il simbolo).
+                # Only one label for the scenario cell; the other empty cells show just “—”
+                # (the legend below explains the symbol).
                 corpo = '<div class="gap-main">—</div>'
                 if adesso:
-                    corpo += badge("NESSUN DATO", "nodata")
+                    corpo += badge("NO DATA", "nodata")
                 extra = ""
 
             if adesso:
@@ -239,23 +239,23 @@ def disegna_griglia(risultato: dict, scenario: dict) -> bool:
 
 def disegna_note(risultato: dict, scenario: dict, evidenziata: bool) -> None:
     righe = [
-        "● TESTATO · n = n esperimenti coprono quella gravità e quell'ossigeno (passa sopra la cella per i nomi). — = nessun dato nelle nostre fonti.",
-        "Le colonne Marte e Luna restano vuote finché nessun dato le giustifica.",
+        "● TESTED · n = n experiments cover that gravity and that oxygen level (hover over the cell for the names). — = no data in our sources.",
+        "The Mars and Moon columns stay empty until some data justify them.",
     ]
     if risultato["senza_ossigeno"]:
         righe.append(
-            "Esperimenti esclusi per dati incompleti (ossigeno non indicato): "
+            "Experiments excluded for incomplete data (oxygen not given): "
             f"{risultato['senza_ossigeno']}"
         )
     if risultato["senza_colonna"]:
         righe.append(
-            "Esperimenti con gravità mista o non indicata, non assegnati a nessuna colonna: "
+            "Experiments with mixed or unspecified gravity, not assigned to any column: "
             f"{risultato['senza_colonna']}"
         )
     if scenario and not evidenziata:
         righe.append(
-            "La cella dello scenario non è evidenziata: gravità o ossigeno dello scenario "
-            "non corrispondono a nessuna cella della griglia."
+            "The scenario cell is not highlighted: the scenario's gravity or oxygen "
+            "does not match any cell in the grid."
         )
 
     st.markdown(
@@ -265,14 +265,14 @@ def disegna_note(risultato: dict, scenario: dict, evidenziata: bool) -> None:
 
 
 # ======================================================================
-# La funzione che chiama A
+# The function that A calls
 # ======================================================================
 
 def render(df: pd.DataFrame, scenario: dict, highlight_ids: list) -> None:
     st.markdown(CSS, unsafe_allow_html=True)
     show_mock_banner()
 
-    st.subheader("Dove abbiamo dati, e dove no")
+    st.subheader("Where we have data, and where we don't")
 
     risultato = coverage(df)
     evidenziata = disegna_griglia(risultato, scenario)

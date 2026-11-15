@@ -1,4 +1,4 @@
-"""Test delle schede Confronto e Lacune (funzioni pure) e dell'esploratore Dati reali."""
+"""Tests of the Compare and Gaps tabs (pure functions) and of the Real data explorer."""
 import sys
 import tempfile
 import unittest
@@ -20,7 +20,7 @@ def make_df():
                 stato_combustibile=None, combustibili=None, sensori=None, area_sicurezza=None, dati_grezzi=None)
     rows = [dict(base, id="A", nome="A", o2_min=14, o2_max=21),
             dict(base, id="B", nome="B", gravita="1g", o2_min=21, o2_max=40),
-            dict(base, id="C", nome="C"),                                   # senza ossigeno
+            dict(base, id="C", nome="C"),                                   # no oxygen
             dict(base, id="D", nome="D", gravita="mista", o2_min=21, o2_max=21)]
     return pd.DataFrame(rows)
 
@@ -31,7 +31,7 @@ class TestGaps(unittest.TestCase):
         self.assertEqual(cov["celle"][("microgravita", 21)], ["A"])
         self.assertEqual(cov["celle"][("1g", 30)], ["B"])
         self.assertEqual(cov["senza_ossigeno"], 1)    # C
-        self.assertEqual(cov["senza_colonna"], 1)     # D: gravita "mista"
+        self.assertEqual(cov["senza_colonna"], 1)     # D: gravita "mista" (mixed)
 
     def test_mars_and_moon_stay_empty(self):
         celle = gaps.coverage(make_df())["celle"]
@@ -40,7 +40,7 @@ class TestGaps(unittest.TestCase):
                 self.assertEqual(nomi, [])
 
     def test_scenario_column_uses_app_keys(self):
-        # app.py passa {"gravity": "mars"|"moon"|"earth"|"iss", "o2": ...}
+        # app.py passes {"gravity": "mars"|"moon"|"earth"|"iss", "o2": ...}
         self.assertEqual(gaps.colonna_scenario({"gravity": "mars", "o2": 30}), "marte")
         self.assertEqual(gaps.colonna_scenario({"gravity": "moon", "o2": 27}), "luna")
         self.assertEqual(gaps.colonna_scenario({"gravity": "earth", "o2": 21}), "1g")
@@ -49,7 +49,7 @@ class TestGaps(unittest.TestCase):
 
     def test_real_csv_coverage_builds(self):
         cov = gaps.coverage(load_investigations())
-        self.assertEqual(len(cov["celle"]), 20)       # 4 gravita' x 5 ossigeni
+        self.assertEqual(len(cov["celle"]), 20)       # 4 gravities x 5 oxygen levels
 
     def test_zero_is_data_not_missing(self):
         self.assertFalse(gaps.manca(0))
@@ -76,7 +76,7 @@ class TestCompare(unittest.TestCase):
         self.assertEqual(compare.intervallo(0, 0, "cm/s"), "0 cm/s")
 
     def test_list_columns_are_readable(self):
-        self.assertEqual(compare.testo("PMMA|cotone", elenco=True), "PMMA, cotone")
+        self.assertEqual(compare.testo("PMMA|cotton", elenco=True), "PMMA, cotton")
         self.assertEqual(compare.numero(26.0), "26")
 
 
@@ -98,7 +98,7 @@ class TestRealData(unittest.TestCase):
 
 class TestMockBanner(unittest.TestCase):
     def test_banner_is_off_for_the_real_dashboard(self):
-        # i dati veri non devono mai essere etichettati "DATI DI PROVA"
+        # the real data must never be labelled "TEST DATA"
         self.assertFalse(mock_data.IS_MOCK)
 
     def test_mock_rows_start_with_MOCK(self):
