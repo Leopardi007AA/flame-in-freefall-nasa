@@ -151,7 +151,7 @@ with t1:
     stat_tile("Investigations", str(len(df)), "Rows in the experiments table")
 with t2:
     stat_tile("Linked NTRS papers", str(len(papers)) if papers else "—",
-              "Papers curated by role B" if papers else "No data yet")
+              "Papers curated by the team" if papers else "No data yet")
 with t3:
     stat_tile("Gravity between 0 and 1 g", str(n_mixed),
               "No measurement declared at 0.16 g or 0.38 g" if n_mixed == 0 else "Mixed-gravity experiments",
