@@ -10,7 +10,8 @@ sources) and where the data do not exist it says so.
 > Independent project, not affiliated with or endorsed by NASA. The flames are an illustrative rendering,
 > not a physical simulation.
 
-Live app: https://flame-in-freefall-nasa-clean-fxsi2n57qbyr5txlrtqpnv.streamlit.app/
+- Live app: https://flame-in-freefall-nasa-clean-fxsi2n57qbyr5txlrtqpnv.streamlit.app/
+- Presentation (Google Slides): https://docs.google.com/presentation/d/1iUPAxiVmiNx3HI-IpGE8ZAAgTozwuArUOD9Xil2ZWaY/edit?slide=id.h2458178d6528d7cb_0_368#slide=id.h2458178d6528d7cb_0_368
 
 ## Getting started
 
