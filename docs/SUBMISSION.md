@@ -9,7 +9,7 @@ Flame in Freefall
 Flame in Freefall is a dashboard of NASA microgravity combustion experiments for fire safety on the Moon and Mars. The user picks a scenario (gravity, oxygen, pressure, airflow); the app ranks the NASA PSI investigations by relevance, animates an illustrative flame, and shows what is NOT known. An AI Copilot (Google Gemini) answers questions and drives the dashboard, but it is not allowed to invent data: every record id and number in an answer is checked by code against the source records, and where no data exists the app says "no data". It matters because Moon (0.16 g) and Mars (0.38 g) habitats depend on flame behaviour in a gravity range that no investigation in our table covers.
 
 ## Link to Project Demo
-<ADD LINK — public video ≤ 30 s with English subtitles, or ≤ 7 slides; no password>
+[<ADD LINK — public video ≤ 30 s with English subtitles, or ≤ 7 slides; no password>](https://docs.google.com/presentation/d/1iUPAxiVmiNx3HI-IpGE8ZAAgTozwuArUOD9Xil2ZWaY/edit?slide=id.h2458178d6528d7cb_0_368#slide=id.h2458178d6528d7cb_0_368)
 
 ## Link to Final Project
 Live app: https://flame-in-freefall-nasa-fzgfghjn5vfzmfhukvnt58.streamlit.app/
