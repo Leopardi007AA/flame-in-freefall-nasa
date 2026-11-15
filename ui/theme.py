@@ -262,15 +262,15 @@ LOGO_CSS = """
     position: absolute;
     top: -30px;
     right: 0;
-    width: 120px;
-    aspect-ratio: 360 / 141;
+    width: 150px;
+    aspect-ratio: 448 / 184;
     background: url("__URL__") center / contain no-repeat;
     pointer-events: none;
     user-select: none;
     z-index: 1;
 }
 @media (max-width: 576px) {
-    #sa-logo { width: 84px; }
+    #sa-logo { width: 104px; }
 }
 @media print { #sa-logo { display: none; } }
 """
